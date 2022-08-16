@@ -2,6 +2,7 @@ import Script from 'next/script'
 
 import siteMetadata from '@/data/siteMetadata'
 
+// https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/319
 const GAScript = () => {
   return (
     <>
