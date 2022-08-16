@@ -6,16 +6,17 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 // https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/319
 const ContentSecurityPolicy = `
-  default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com;
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app;
-  style-src 'self' 'unsafe-inline';
-  img-src * blob: data:;
-  media-src 'none';
-  connect-src *;
-  font-src 'self';
-  frame-src giscus.app
+  
 `
+// default-src 'self';
+//   script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app *.googletagmanager.com *.google-analytics.com;
+//   style-src 'self' 'unsafe-inline';
+//   img-src * blob: data:;
+//   media-src 'none';
+//   connect-src *;
+//   font-src 'self';
+//   frame-ancestors 'self';
+//   frame-src giscus.app
 
 const securityHeaders = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
