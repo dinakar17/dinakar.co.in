@@ -1,6 +1,7 @@
 import '@/css/tailwind.css'
 import '@/css/prism.css'
 import 'katex/dist/katex.css'
+import NextNProgress from 'nextjs-progressbar'
 
 import '@fontsource/inter/variable-full.css'
 
@@ -24,6 +25,7 @@ export default function App({ Component, pageProps }) {
       {isDevelopment && isSocket && <ClientReload />}
       <Analytics />
       <LayoutWrapper>
+        <NextNProgress />
         <Component {...pageProps} />
       </LayoutWrapper>
     </ThemeProvider>

@@ -1,12 +1,12 @@
 ---
-name: Tails Azimuth
+name: Dinakar
 avatar: /static/images/avatar.png
-occupation: Professor of Atmospheric Science
-company: Stanford University
-email: address@yoursite.com
-twitter: https://twitter.com/Twitter
-linkedin: https://www.linkedin.com
-github: https://github.com
+occupation: Final year student at NITC
+company: National Institute of Technology Calicut
+email: dinakar.chennupati17@gmail.com
+twitter: https://twitter.com/DinakarChennup1
+linkedin: https://www.linkedin.com/in/dinakarchennupati/
+github: https://github.com/dinakar17
 ---
 
 Tails Azimuth is a professor of atmospheric sciences at the Stanford AI Lab. His research interests includes complexity modelling of tailwinds, headwinds and crosswinds.
