@@ -1,0 +1,93 @@
+---
+title: 'What the Heck is an API?'
+date: '2022-8-20'
+tags: ['web-development']
+draft: false
+summary: 'This article provides a simple walk-through to get a grip on what exactly is an API that people often refer to. Confused what an API is, feel free to go through the blog.'
+---
+
+After reading this article, you should be able to answer the following questions to your female colleagues, buddies, or companions:
+
+- What on earth does one mean by an API?
+- What are these API endpoints, paths, parameters, and authentication people are referring to?
+- Some of the examples and intuition behind the APIs
+
+Let us start with the `technical definition` of an API
+
+> An Application Programming Interface (API) is a set of commands, functions, protocols, and objects that programmers can use to create software or interact with an external system (server).
+
+That’s a lot of technical jargon packed in there! Let’s break it down
+
+Before breaking it down let me present an analogy of Kitchen and Restaurant to make you better understand the concept.
+
+## Analogy Number One: Kitchen and Restaurant
+When you go to a restaurant, you're given a MENU that shows all the services/food items they offer to you like let's say cakes, sandwiches, burgers, and donuts. But out of curiosity or agitation, you want to taste some other items by trespassing into their kitchen, and then the probable outcome from a mean restaurant owner would be “That's none of your business. Only items from the MENU will be served here."
+
+Translating the above analogy into the technical world, it’s kind of similar to data. For every website that has its own data, be it Facebook, which has data of users, there are certain pieces of data that they will allow you to access but there are other pieces that are not really your business.
+
+<div style={{background:"#EDE5E3", padding:"10px"}}>
+Question: So how can these websites (e.g., Facebook, Twitter) tell you what are the things that you can actually access from them and how to do that?
+
+Answer: In the case of Restaurants it’s MENU. In the case of these websites, it’s an API.
+
+![Menu terminology of an API](/static/images/MenuandAPI.png)
+</div>
+An API, some people will consider being a contract. It’s a contract between the data provider and the developer. And essentially what it says is these are all the things that developers can access, and these are the methods, the objects, the protocols that you would use to access them.
+
+Coming back to our definition, then it starts to make a little bit more sense, right, where an API is a set of commands, functions, protocols, and objects.
+
+I know it’s a bit fuzzy wrapping your mind around the above paragraphs, let me give you more practical examples to make it crystal clear.
+
+### <span style={{color:"#9812EF"}}>Example #1: JQuery API</span>
+Point 1: What are the set of functions or methods, objects or classes, commands, and protocols in this API?
+
+- Functions - add() , addBack(), addClass()
+- Objects - event.result, event.relatedTarget
+
+Point 2: Is it used to create software or interact with an external system?
+
+- It is used by developers like us to create a piece of software.
+
+### <span style={{color:"#9812EF"}}>Example #2: OpenWeather API</span>
+
+Point 1: What are the set of functions or methods, objects or classes, commands, and protocols in this API?
+
+- Objects - “coord”, “weather”, “name”
+
+Point 2: Is it used to create software or interact with an external system?
+- It is an external system that we can tap in to get the provided information.
+
+### <span style={{color:"#9812EF"}}>Example #3: Firebase API</span>
+
+Point 1: What are the set of functions or methods, objects or classes, commands, and protocols in this API?
+
+- Functions - addDoc(), getDocs(), updateDoc() etc….
+- Commands - `firebase login`, `firebase init` etc….
+
+Point 2: Is it used to create software or interact with an external system?
+- This is both a tool for creating software and an external system that provides many functionalities like database, authentication, etc…
+
+Now, when we're talking about APIs, you will often need to think about things including:
+
+- API endpoints
+- Paths
+- Parameters
+- Authentication
+
+This image would be the perfect representation of all the above four points:
+
+![API Endpoint](/static/images/api4.png)
+>The HTTP protocol is the basis for data communication on the World Wide Web. It is due to this fact that any programming language (Python, JavaScript, C++) can be used to build a server that can communicate with a client (browser). So HTTP is the common language used by this client and server duo to communicate with each other.
+
+So this is the platform used by anyone who wants to expose their API ( through authentication) to the Internet so that it can be used by anyone.(interaction with the external system)
+
+Also, libraries like Keras API, Pytorch API are available through packages
+
+## Conclusion
+
+So, whenever you’ve come across the term API, recall the definition and just analyze whether the things mentioned in the definition are present in that so-called API. Also, If you want to explain to someone use the Kitchen and restaurant analogy.
+
+Congratulations if you have made it this far. I hope you learned something. I appreciate your valuable time and look forward to seeing you in another blog post. Share if you like (optional).
+
+
+
