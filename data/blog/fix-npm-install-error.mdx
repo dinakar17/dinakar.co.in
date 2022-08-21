@@ -1,0 +1,66 @@
+---
+title: 'Fix "npm install" error: Module not found'
+date: '2022-8-21'
+tags: ['javascript', 'node.js', 'web-development']
+draft: false
+summary: 'In August 2022, Amazon conducted a coding contest examination on our campus as part of its recruitment efforts. In this blog, you can find the solutions to the problems asked in the coding contest'
+---
+
+<div style={{textAlign: 'center'}}>
+<Image src="/static/images/npm-install-error.png" alt="npm-installation error: module not found error" width={450} height={450} style={{paddingLeft: "40px"}}/>
+Image Credits: [DALL.E](https://labs.openai.com/) by [OpenAI](https://openai.com/)
+</div>
+
+# Error
+```shell:PowerShell {8}
+> npm install
+'CSS' is not recognized as an internal or external command,
+operable program or batch file.
+node:internal/modules/cjs/loader:930
+throw err;
+^
+
+Error: Cannot find module 'C:\Users\Dinakar\Documents\husky\lib\bin.js'
+at Function.Module._resolveFilename (node:internal/modules/cjs/loader:927:15)
+at Function.Module._load (node:internal/modules/cjs/loader:772:27)
+at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:79:12)
+at node:internal/main/run_main_module:17:47 {
+code: 'MODULE_NOT_FOUND',
+requireStack: []
+}`
+
+```
+
+## Reasons behind the Error
+You can see from the highlighted line in the above error that node.js is trying to find the file in an invalid directory instead of `node_modules` directory
+
+This could probably occur due to a number of reasons and the following could be one of them
+- If you've not installed node in your local computer
+- Could potentially occur due to some .js files with same names in different directories, which were in the same main directory.
+
+
+
+**Note: If you want to reproduce the error, run the following command**
+
+```shell
+node thisFileDoesnotexists.js
+```
+
+
+## Fix #1: Replace using "npm" with "yarn"
+1. Make sure you've installed the latest version of [node](https://nodejs.org/en/download/) (For good reasons, it's better to have the latest node version, regardless of whether you have an older one.)
+1. Then install [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable) and make sure to delete `package-lock.json` (Since this file is produced by npm during "npm install") file.
+1. Finally run `yarn` in the correct directory where your `package.json` file exists.
+```shell
+> yarn 
+```
+
+## Fix #2: Remove and Reinstall npm and node
+    This fixes a lot of issues/bugs that are producing this error in the first place.
+
+
+> If this error still persists, make sure to visit the following links in the following section for further help
+
+## Further Help
+- https://stackoverflow.com/questions/53545800/internal-modules-cjs-loader-js582-throw-err#62740853
+- https://github.com/nodejs/node/issues/38317
