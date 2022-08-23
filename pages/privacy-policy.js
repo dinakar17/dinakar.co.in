@@ -2,7 +2,7 @@ import React from 'react'
 
 const index = () => {
   return (
-    <div className="prose prose-lg mx-auto">
+    <div className="prose prose-lg mx-auto dark:text-white prose-h1:dark:text-white prose-h2:dark:text-white">
       <h1>Privacy Policy for Dinakar</h1>
       <p>
         At our website, accessible from diankar.co.in, one of our main priorities is the privacy of

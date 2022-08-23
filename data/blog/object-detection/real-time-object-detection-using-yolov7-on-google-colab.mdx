@@ -1,0 +1,119 @@
+---
+title: 'Real Time Object Detection using YoloV7 on Google Colab'
+date: '2022-08-22'
+tags: ['deep-learning', 'machine-learning', 'tutorial', 'guide']
+draft: false
+layout: PostSimple
+summary: 'Want to test your video using Yolov7 and Google Colab? Learn how to make real-time object detection using your own videos in this tutorial'
+images: ['/static/images/object-detection/yolov7-intro.png']
+---
+
+![Yolov7](/static/images/object-detection/yolov7-intro.png)
+
+<div style={{textAlign:"center"}}>Image Credits: [DALL.E](https://labs.openai.com/) by [OpenAI](https://openai.com)</div>
+
+# Introduction
+
+YOLO (you only look once) is the start-of-the-art object detection model available out there overpowering most of its rivals. 
+
+How does it work?
+
+**If you want to know how YOLO works in one paragraph, it goes like this:**
+	
+Firstly, training data is composed of images, bounding box vectors (i.e., [Pc Bx By Bw Bh C1 C2 ....]), with each vector representing a box around a known object in the image. Thus, images with four known objects in it will have four such vectors, and with seven will have seven vectors.
+
+<Block type="Note">In vector [Pc Bx By Bw Bh C1 C2 ...] (Bounding box representation), Pc represents probability of a particular class that the box portrays, Bx & By represent center coordinates of the box and Bw & Bh are width and height respectively. [C1, C2 ...] count corresponds to the number of classes present in the dataset.</Block>
+
+Since it is essential to have a fixed length vector to train a neural network model, the key feature of the YOLO model is to divide the image into NxN grid where each grid cell produces B bounding boxes of their own (i.e.,  [Pc Bx By Bw Bh C1 C2 ....]). Therefore we’re now having a fixed length and number of vectors. Taking the above technical jargon and translating it into numbers, _if we have a 4x4 grid and each grid produces a 1x7 vector, then we have 16 (1x7) vectors in total_. (Here 1x7 signifies that we're dealing only with two classes) 
+	
+Now that we know how YOLO's training (grid celled images against fixed length vectors) works, let's talk briefly about prediction. As with training, given an image, it is divided into NXN grid cells, and each cell produces B bounding boxes. As a result, there will be a clutter of bounding boxes (since each cell produces B boxes, there will be overlap), which is resolved by [intersection over union (IOU)](https://medium.com/analytics-vidhya/iou-intersection-over-union-705a39e7acef#:~:text=IOU(Intersection%20over%20Union)%20is,fits%20perfectly%20around%20an%20object.) and [non-maximum suppression (NMS)](https://learnopencv.com/non-maximum-suppression-theory-and-implementation-in-pytorch/). Last but not least, we now have the prediction (bounding box vectors), which we can use to draw a box around the predicted object.
+
+Phew! I know the above would take a lot of energy to intake, but just in case if you want to explain to someone about YOLO in a minute or so you could probably do so with the above paragraphs.
+
+**Enough theory, Let’s just dive into the central purpose of this tutorial, which is to perform object detection on any youtube video using YOLOV7 by running the model on GPU powered google colab platform just like the following.**
+
+
+[video link]
+
+
+### Step 1: Open Google Colab and set the runtime type to GPU accelerator
+
+That is, Choose **RunTime** from the Navbar and then select **Change runtime type** and set the hardware accelerator to **GPU**
+
+### Step 2: Download the Zip file through this [Google Drive](https://drive.google.com/drive/folders/1cDQwVkMBdfr3qRYW_rGW4v8VmwDGiWtn?usp=sharing) link, upload to colab and then unzip it by running the following command
+
+```shell
+!unzip ONNX-YOLOV7-Object-Detection.zip
+```
+
+<Block type="QuickTip">You can also upload the file to your drive and mount your drive to colab and then unzip it by providing zip file location in `unzip "file-location"`.</Block>
+
+### Step 3: Change the current working directory and install the prerequisites 
+```python
+import os
+
+print(os.getcwd())
+os.chdir("/content/ONNX-YOLOV7-Object-Detection")
+print(os.getcwd())
+```
+
+```shell
+!pip install -r requirements.txt
+!pip install youtube_dl
+!pip install git+https://github.com/zizo-pro/pafy@b8976f22c19e4ab5515cacbfae0a3970370c102b
+```
+
+### Step 4: Open the video_object_detection.py file and replace the youtube link with the link you want to test with YOLOv7.
+```py {6}
+import cv2
+import pafy
+
+from YOLOv7 import YOLOv7
+
+videoUrl = 'https://youtu.be/nhyDDH-YHOc' # Replace this link with your custom youtube video link
+videoPafy = pafy.new(videoUrl)
+print(videoPafy.streams)
+cap = cv2.VideoCapture(videoPafy.streams[-1].url)
+start_time = 0  # skip first {start_time} seconds
+cap.set(cv2.CAP_PROP_POS_FRAMES, start_time * 30)
+
+out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 30, (1280, 720))
+
+...
+
+```
+<Block type="Note">Google colab doesn't support GUI (Graphical user interface). That is the reason why functions like `cv.imshow()`, `cv2.namedWindow()` doesn't work </Block>
+
+### Step 5: Run the following command and wait for the results. 
+
+```shell
+!python video_object_detection.py
+```
+
+```shell:Output
+[normal:mp4@640x360, normal:mp4@1280x720]
+....
+```
+
+
+Step 5 takes between 5 and 40 minutes, depending on the video's quality and duration. And sometimes, even more, depending upon your internet connection and Google Colab’s GPU traffic. For faster results, test videos in under 4 minutes or so.
+
+
+Upon finishing the execution, you can see the output file named “output.avi” in the current working directory. Download the file and view the final output.
+
+<Block type="QuickTip">When you download the "output.avi" file during the running process, you only get a video rendered to the previously processed frames.</Block>
+
+# Credits
+
+- Official YoloV7 Research Paper - [YOLOv7: Trainable bag-of-freebies sets new state-of-the-art for real-time object detectors](https://arxiv.org/abs/2207.02696)
+
+- [Source code](https://github.com/ibaiGorordo/ONNX-YOLOv7-Object-Detection) for YOLOv7 
+
+- Hugging faces [Demo](https://huggingface.co/spaces/akhaliq/yolov7) using Gradio
+
+- [Python scripts performing object detection using the YOLOv7 model in ONNX.](https://github.com/ibaiGorordo/ONNX-YOLOv7-Object-Detection)
+
+- [ONNX Models](https://github.com/PINTO0309/PINTO_model_zoo/tree/main/307_YOLOv7) of YOLOv7
+
+That's the conclusion, I hope you enjoyed it. If you're stuck at any point, please comment down below (if comments are not showing up, kindly pull a refresh to clear any glitches).
+

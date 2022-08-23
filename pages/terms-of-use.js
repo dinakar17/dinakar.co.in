@@ -2,7 +2,7 @@ import React from 'react'
 
 const index = () => {
   return (
-    <div className="prose prose-lg mx-auto">
+    <div className="prose prose-lg mx-auto dark:text-white prose-h1:dark:text-white prose-h2:dark:text-white">
       <h1>Terms & Conditions</h1>
       <p>Welcome to my website!</p>
       <p>
