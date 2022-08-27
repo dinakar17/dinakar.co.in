@@ -9,7 +9,7 @@ const Block = ({ children, type, color = '#A020F0' }) => {
     return (
       <div
         // style={{ backgroundColor: color, borderLeftColor: color }}
-        className={`rounded-r-lg border-l-4 border-l-purple-800 bg-purple-200 p-3 font-medium text-purple-500`}
+        className="rounded-r-lg border-l-4 border-l-purple-800 bg-purple-200 p-3 font-medium text-purple-500"
       >
         Note: {children}
       </div>
@@ -21,7 +21,7 @@ const Block = ({ children, type, color = '#A020F0' }) => {
           {' '}
           <FcIdea className="text-4xl" /> <span className="pt-2 font-bold">Quick Tip</span>
         </div>
-        <div className="font-medium">{children}</div>
+        <div className="pl-10 font-medium">{children}</div>
       </div>
     )
   }

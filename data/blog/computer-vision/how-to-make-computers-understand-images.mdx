@@ -1,0 +1,79 @@
+---
+title: 'How To Make Computers Understand Images?'
+date: '2022-08-26'
+tags: ['deep-learning', 'machine-learning', 'computer-vision']
+draft: true
+layout: PostSimple
+summary: 'As humans identifying and understanding images is fairly an easy task. But for computers the story is quite different and difficult. In this guide we will make computers to "see" and understand digital images.'
+---
+
+<TOCInline toc={props.toc} exclude="Overview" toHeading={2} asDisclosure />
+
+Let us start by looking at the picture below.
+
+Here's my question for you. 
+
+"What is the name of the person/celebrity in that picture?"
+
+It's pretty straight forward, isn't it? Since we've seen her once or twice, we're able to predict the person's name.
+
+And here's what I want you to think and question yourself. 
+
+"What should I have to do to make computers understand and predict the person's name as I did?"
+
+Well, Today's your lucky day because we together will walk through the solution and approach to the above problem.
+
+## What does a computer can undestand in the first place?
+Any computer designed as of now can only understand digits i.e., simply numbers.
+
+Breaking this down a bit further, since computers are made of transistors and semiconductors stuff whose state is either "on"(1) or "off"(0) pioneering the idea of binary numbers. And since we know the fact that binary numbers can be easily converted to decimal numbers, we can now say that computers can only understand numbers.
+
+The above paragraph gives us our first hint to solve the puzzle (problem). That is, we need to convert our images to numbers first. Now, the xxx-dollar question is how on earth are we going to do that?
+
+## Task 1 : Convert Images to Numbers
+Fortunately we've got some "Python" libaries which helps us to do that. Here are the popular options you can choose from.
+
+- PIL or Pillow
+- Matplotlib
+- **Keras**
+- Numpy
+
+
+Since "keras" is beginner-friendly, we're going to go with KERAS.
+```python
+from keras.preprocessing.image import load_img
+from keras.preprocessing.image import img_to_array
+
+img = load_img("image_path")
+print(type(img))
+
+# convert the image to numbers
+img_arr = img_to_array(img)
+
+img.show() # if you're using local computer
+display(img) # if you're using google colab
+```
+
+<Block type="QuickTip">Use Google Colab instead of your local computer since it's pretty easy to get started with.</Block>
+
+See the output yourself since implementation is the most important thing in machine learning. Now as we're done with our task1, our next task is to somehow train our computer to understand these numbers in a meaningful way. Again, the question remains the same "How to do it?"
+
+## Task 2 : Use Convolutional Neural Networks to understand "image numbers"
+
+Here's my own famous quote on Convolutional Neural Networks (I hope it is), 
+
+Convolutional Neural Networks are the retina of computers to "see" and understand images
+
+Let's unravel this concept by visualizing some pictures
+
+![image to matrix of numbers](/static/images/object-detection/image-to-matrix.png)
+
+
+#### Here's another picture depicting how CNNs operate on these matrices
+
+![alt text](https://miro.medium.com/max/536/1*MrGSULUtkXc0Ou07QouV8A.gif)
+#### And here's the Image translation to the above mathematical operation
+
+![image perspective of CNNs](/static/images/object-detection/feature-map.png)
+
+

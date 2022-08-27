@@ -1,0 +1,249 @@
+---
+title: 'Tricky Questions on Pointers and OOPs in C++'
+date: '2022-08-26'
+tags: ['coding-problems', 'c-pointers', 'recruitment']
+draft: false
+summary: 'Pointers is one of the trickiest concepts in programming languages like C, C++. This blog has 10 such questions asked by a renowned company (Synopsis)'
+---
+
+## Intro
+The following questions were asked [Synopsis](https://www.synopsys.com/) through an online test as a part of their recruitment process (on-campus).
+
+### Question 1
+
+```c
+#include<stdio.h>
+void f(char**);
+
+int main(){
+    char *argv[] = {"sy", "cd", "no", "ps", "ys", "kl"};
+    f(argv);
+    return 0;
+}
+
+void f(char **p){
+    char *t;
+    t = (p += sizeof(int))[-1];
+    printf("%s\n", t);
+}
+```
+
+### Question 2
+What will be the output of the following snippet?
+
+```c
+#include<stdio.h>
+
+int** ibm(){
+    static int a[] = {4, 8, 12, 16};
+    static int *pointer = a;
+    static int **p = &pointer;
+    return p;
+}
+
+int main(){
+    int **ptr;
+    ptr = ibm();
+    printf("%d", ++**ptr);
+    return 0;
+}
+```
+
+### Question 3
+
+The following C function takes a single-linked list of integers as a parameter and rearranges the elements of the list. The function is provided with integers 1, 2, 3, 4, 5, 6, 7 in the given order. What will be the contents of the list after the function completes execution?
+
+```c
+struct node{
+    int value;
+    struct node *next;
+}
+
+void revolve(struct node* list){
+    struct node *p, *q;
+    int temp;
+
+    if((!list) || !list -> next) return;
+
+    p = list;
+    q = list -> next;
+
+    while(q){
+        temp = p -> value;
+        p -> value = q -> value;
+        q -> value = temp;
+        p = q -> next;
+        q = p ? p -> next: 0;
+    }
+}
+```
+
+### Question 4
+What is the return value of f(p, p) if the value of p is initialized to 5 before the call?
+
+```c
+int f(int &x, int c){
+    c = c - 1;
+    if(c == 0) return 1;
+
+    x = x + 1;
+    return f(x, c) * x;
+}
+```
+
+### Question 5
+What is the output of the following program
+
+```c
+#include<stdio.h>
+#include<stdlib.h>
+
+Union employee
+{
+    char name[15];
+    int age;
+    float salary;
+}
+
+const union employee e1;
+
+int main(){
+    strcpy(e1.name, "K");
+    printf("%s %d %f", e1.name, e1.age, e1.salary);
+    return 0;
+}
+```
+
+### Question 6
+What is the functionality of the following piece of code?
+
+```cpp
+public int function(){
+    Node temp = tail.getPrev();
+    tail.setPrev(temp.getPrev());
+    temp.getPrev().setNext(tail);
+    size--;
+    return temp.getItem();
+}
+```
+
+### Question 7
+```cpp
+#include<iostream>
+using namespace std;
+
+class Test
+{
+    public:
+        void fun() const
+        {
+            cout << "func() const called" << endl;
+        }
+        void fun()
+        {
+            cout << "fun() called" << endl;
+        }
+};
+
+int main(){
+    Test t1;
+    const Test t2;
+    t1.func();
+    t2.func();
+    return 0;
+}
+```
+
+### Question 8
+
+```cpp
+#include<iostream>
+#include<vector>
+using namespace std;
+
+
+int main(){
+    vector<int> myvector(5);
+
+    int *p = myvector.data();
+
+    *p = 10;
+    ++p;
+    *p = 20;
+    p[2] = 100;
+
+    cout << "My vector contains:";
+    for(unsigned i = 0; i < myvector.size(); ++i){
+        cout << " " << myvector[i];
+        cout << endl;
+    }
+    return 0;
+}
+```
+
+### Question 9
+
+What is the output of the following code
+```cpp
+
+#include<iostream>
+void func(int *pA){
+    pA++;
+}
+
+int main(){
+    int a = 20;
+    fun(&a);
+    int *pA = &a;
+    fun(pA);
+    std::cout << a;
+    return 0;
+}
+```
+
+### Question 10
+
+```cpp
+#include<iostream>
+class A{
+    public:
+        virtual void a() = 0;
+        A() {
+            std:: cout << "A ";
+        }
+};
+
+class B: public A
+{
+    public:
+        virtual void a() {std::cout << "a ";}
+        B() {
+            std:: cout << "B ";
+        }
+};
+
+int main(){
+    A *pA = new B();
+    pA -> a();
+    return 0;
+}
+```
+
+## References
+
+https://www.geeksforgeeks.org/c-plus-plus-gq/virtual-functions-gq/
+https://www.cquestions.com/2009/09/function-which-is-returning-pointer-to.html
+https://gateoverflow.in/3815/gate-it-2005-question-54
+https://www.geeksforgeeks.org/data-structures-and-algorithms-set-31/
+https://www.indiabix.com/c-programming/const/discussion-558
+https://www.sanfoundry.com/data-structure-questions-answers-doubly-linked-lists/
+http://placementstudy.com/cpp-programming/424/vector
+https://www.geeksforgeeks.org/output-c-programs-set-47-pointers/
+
+
+
+
+
+
+
+
