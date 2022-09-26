@@ -1,19 +1,15 @@
 const projectsData = [
   {
-    title: 'A Search Engine',
-    description: `What if you could look up any information in the world? Webpages, images, videos
-    and more. Google has many features to help you find exactly what you're looking
-    for.`,
-    imgSrc: '/static/images/google.png',
-    href: 'https://www.google.com',
+    title: 'Image Caption Generator',
+    description: `This project is a web application that generates captions for images. It uses a CNN-RNN model to generate captions for images. The model is trained on the Flickr8k dataset. The model is deployed using Flask and the web application is built using React.`,
+    imgSrc: '/static/images/image-caption-generator.jfif',
+    href: 'https://github.com/dinakar17/image-caption-generator',
   },
   {
-    title: 'The Time Machine',
-    description: `Imagine being able to travel back in time or to the future. Simple turn the knob
-    to the desired date and press "Go". No more worrying about lost keys or
-    forgotten headphones with this simple yet affordable solution.`,
-    imgSrc: '/static/images/time-machine.jpg',
-    href: '/blog/the-time-machine',
+    title: 'Real time Object Detection using YOLOv7',
+    description: `This project is all about exploring YOLOv7 and its capabilities as mentioned in the paper. What I have tried is I have tested the model on a custom video I have shot and the results are pretty good. I have also tried to test the model on some random youtube videos and the results are mind-blowing`,
+    imgSrc: '/static/images/yolo-big.jpg',
+    href: 'https://dinakar.co.in/blog/computer-vision/real-time-object-detection-using-yolov7-on-google-colab',
   },
 ]
 

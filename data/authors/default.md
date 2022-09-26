@@ -9,8 +9,9 @@ linkedin: https://www.linkedin.com/in/dinakarchennupati/
 github: https://github.com/dinakar17
 ---
 
-Tails Azimuth is a professor of atmospheric sciences at the Stanford AI Lab. His research interests includes complexity modelling of tailwinds, headwinds and crosswinds.
+Hey everyone, My name is Dinakar. I am currently doing my final year at National Institute of Technology, Calicut. 
 
-He leads the clean energy group which develops 3D air pollution-climate models, writes differential equation solvers, and manufactures titanium plated air ballons. In his free time he bakes raspberry pi.
+I like to work on projects that are related to Machine Learning and Deep Learning. I am also interested in working on projects relevant to Computer Vision and Natural Language Processing. In short I am a Machine Learning enthusiast and I am into any domain
+that machine learning offer its solution in.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate.
+Besides technical stuff, I enjoy playing cricket and reading books (I read Harry Potter series twice!). I also like to explore new technologies that sprung up in the recent years like Blockchain, IoT, etc. A regular tweeter and a blogger, I like to share my knowledge with others. 
