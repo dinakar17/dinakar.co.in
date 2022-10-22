@@ -70,6 +70,7 @@ module.exports = withBundleAnalyzer({
       },
     ]
   },
+  // we are replace react with preact in production since it is smaller and faster than react
   webpack: (config, { dev, isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
