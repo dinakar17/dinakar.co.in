@@ -1,0 +1,454 @@
+---
+title: 'Building Your Own Image Server: A Step-by-Step Guide Using Node & Express'
+date: '2023-01-27'
+tags: ['sql', 'machine-learning', 'nlp']
+draft: false
+layout: PostSimple
+summary: "Get an exclusive inside look into the technology behind GPT, the state-of-the-art language generation AI. Understand the complex mechanisms that power this innovative tool and see how it is revolutionizing the way we write and communicate. Don't miss out on this informative and captivating read."
+---
+
+<Image
+  src="/static/images/image-server-tutorial.gif"
+  alt="Image server Tutorial"
+  objectFit="cover"
+  objectPosition="center"
+  width={800}
+  height={500}
+/>
+
+<TOCInline toc={props.toc} asDisclosure />
+Here’s what you are going to learn through this blog post. You’ll know how to build an image server i.e.,
+a NodeJS & Express server that takes in an image, saves it in a folder, and then returns back the URL
+of the uploaded image (see the below figure). Hopefully, by the end of this blog post, you’ll learn some
+code through exciting illustrations.
+
+![Image Server taking in image files, saving them in a folder, and finally returning the URL of the image](https://lh4.googleusercontent.com/hqLUC0Xr6MoFEtimW_wMZSMOsIpjCKexYl4vA_0hEbsnsErqWotJagIUYrUFEQOotll6RaVLGhQMyyVA2KAXlbd5d4n41yCr7C5iWkgTZudreviSQfObuViKbE7vuaiEshrkGkVejAnNYlY9-oUyjyI)
+
+<Block type="link">
+  Figure: Image Server taking in image files, saving them in a folder, and finally returning the URL
+  of the image
+</Block>
+
+![](https://lh3.googleusercontent.com/EjfFdIZQ40hC6b895WERwB1extD9G-hP36dtkz_5PRz4Ba941Mc1epjoDjpPpVtmUNQ--WFYWzsVA2qklSgBlV22-gtgCEP1wTciWyShStsSMRY6GNx_2oOJa8kf2aVdX9OHayGUPP3Eo-06TB7qTRU)
+
+## Setting up NodeJS & Express Server
+
+```
+npm init –yes
+```
+
+The above line of code automatically generates a package.json file with default values.
+
+What is the use of the **package.json file?**
+
+The package.json file is used to **manage the dependencies and scripts** for a Node.js project. It contains information about the project and its dependencies, and it* **serves as a manifest** for the project*.
+
+It's important because it helps other developers understand the structure of your project and also helps tools to build or test your project. For instance, after forking a web application repository, a developer first goes through the package.json file to know what packages are installed and other info about the project.
+
+Let’s install the required dependencies. Note that if I haven’t mentioned the installation of any package and put it in my code make sure you install it using the `npm install …` command.
+
+```
+npm install express body-parser nodemon sharp multer dotenv
+```
+
+![](https://lh6.googleusercontent.com/uLNvE0eE5sxXUNNiu8pO_nnrUdFG9H6N6Si30dIkUiJLygPZ94Ywd9tdSYkb3xCkOXadAaraynmsv7oxI1R_m6XKmE2gnoXEo5PXbvztF6V_8totUN6KPylZaRff7LIbBZBq1-1XcTMrCUqVKZZIKBY)
+
+Here’s the file structure and the corresponding code work summary
+
+![](https://lh3.googleusercontent.com/lgGrQNUF5PFD2Tp6EY8uSZUfdEYyUskF8DCC7KhLWTsrh_iyt2CNOlY1voD6VqtE4ES6pnltr-BXGRRMea1dLAABAVMQLIoIMTlXUN0ylr-DABrPO1OTysen06dgnbRrFpNz2z4P-9o4kJ5vgGTVNLE)
+
+Ok! That’s the whole illustration about the packages installed and files created. Let’s look into the important parts of the code. You can find the entire code in the GitHub repository and it is well-commented using a very simple tone. However, I’ll explain the main parts of the code as mentioned earlier through some pictures and simple sentences.
+
+Here's the link to the GitHub repository: https://github.com/dinakar17/Simple-Image-Server-Built-With-Node-NextJs
+
+#### Point 1. Out-of-the-Box Error Handling in a NodeJS server
+
+```javascript:index.js
+…
+process.on('unhandledRejection', (err, promise) => {
+    console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+    console.log(err.name, err.message);
+
+    server.close(() => {
+      process.exit(1);
+    });
+});
+
+
+process.on('uncaughtException', err => {
+    console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+    console.log(err.name, err.message);
+
+    server.close(() => {
+      process.exit(1);
+    });
+});
+
+
+process.on('SIGTERM', () => {
+    console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+    server.close(() => {
+      console.log('💥 Process terminated!');
+    });
+});
+```
+
+**A small note on Event Listeners unhandledRejection, uncaughtException, and SIGTERM**
+
+- The `unhandledRejection` event is emitted when a Promise is rejected and no error handler is attached to the promise.
+- The `uncaughtException` event is emitted when an exception is thrown and not caught
+- The `SIGTERM` event is emitted when the process is about to be terminated (for example, if the system is shutting down or if the process is being killed).
+
+<ins>
+  The main purpose of setting up these event listeners (One of the best practices for **error
+  handling** of an express server)
+</ins>
+
+The purpose of this code is to handle and log errors that may occur during the execution of the Node.js application and close the server gracefully when the process is about to be terminated. This can help ensure that the application does not continue to run in an unstable state and can help with debugging and understanding what went wrong.
+
+#### Point 2. Use Global Error Handler instead of individual error handling for each route
+
+```javascript
+app.get('/api-endpoint', async (req, res, next) => {
+  try {
+    // if everything goes well
+    res.status(200).send('Success')
+  } catch (err) {
+    // if error occurs
+    res.status(500).send('Error')
+  }
+})
+```
+
+Instead of writing the `res.status(errorStatus).send(“Errormsg”)` for each and every route separately like in the code above, it is a best practice to handle errors globally which saves us time and also makes debugging errors easy. Let’s see how
+
+**Step 1:** Define a higher-order function(HOF) that wraps every route handler (i.e., `(req, res) => {}` -> Route Handler).
+
+```javascript:catchAsync.js
+// we will do `import catchAsync from catchAsync.js`
+export default (fn) => (req, res, next) => {
+    fn(req, res, next).catch(next);
+};
+```
+
+**Explanation:**  Basically this particular HOF takes `function` as an argument and attaches a `catch(next)` to it. So from now onwards errors that occur in the functions are handled by `middleware` that we pass into the `next()` function (you will see what this means in a moment)
+
+**Step 2:** Define the `AppError` class which is an extension of the parent `Error` class.
+
+```javascript:AppError.js
+class AppError extends Error {
+    constructor(message, statusCode) {
+      // The message argument is passed to the parent class constructor using super(message).
+      super(message);
+      // In addition to the Error class, we are adding three more properties to the error object.
+      this.statusCode = statusCode;
+      this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+      this.isOperational = true;
+
+      Error.captureStackTrace(this, this.constructor);
+    }
+  }
+// (err, req, res, next) => {... }. The above code adds four properties to the error object. That's it.
+
+export default AppError;
+```
+
+**Explanation**: AppError adds three more properties and extends the message shown by the `Error.captureStackTrace()` method. In a simple tone, it gives the `err` object (available in the route handler which handles errors i.e., `(err, req, res, next) => {}`) extra properties namely `statusCode`, `status`, and `operational`.
+
+**Step 3:** Finally, as mentioned before, wrap every route handling function with the `catchAsync` function.
+
+```javascript
+app.get(
+  '/api-endpoint',
+  catchAsync(async (req, res, next) => {
+    try {
+      // If everything is fine, then send the response.
+      res.status(200).json({
+        status: 'success',
+        message: 'Success',
+      })
+    } catch (err) {
+      // If there is an error, then pass the error to the next middleware function.
+      next(new AppError('Error message', 500))
+    }
+  })
+)
+```
+
+The above three steps culminate for the following purpose i.e., the errors are now handled by the `globalErrorHandler.js` function (see the pictures below for a better grasp of what I’m saying).
+
+![](https://lh6.googleusercontent.com/8pnMWP7tbLHzWqTxiikNw4vTRTJx30Wrx4f7BTAh7_Sl0TINmnNnGr0PKwSUGtwheUnY7L1V8ta4543v_F0v2p9A9ie-n0MhABmEfOBKJfen-8DQgbYoTFpE2gffpj7GmW6Q5CjbWLDH1SWCL7yiw_o)
+
+![](https://lh5.googleusercontent.com/oO3LKAj3CgZRR_bcLucWsTVkvMEbz7LGZi0laqG9hbTHDJc9sYjEy16I3UEJ7DOtYgAcINsd5pCggZWRdj_erKZRdnVkLKP_on_aAkDaRkYnmjat3mtMmXOWBmKqDmis2WyXV399wleBdDu-EWHaQN4)
+
+## Setting up Frontend with NextJS
+
+We will use NextJS as our frontend framework (though it’s designed for both the front end and back end).
+
+```bash
+yarn create next-app . --typescript
+```
+
+This command will create the necessary files and dependencies for a Next.js project with TypeScript inside the current directory you’re residing in.
+
+Here’s an illustration of the packages installed and their respective uses.
+
+![](https://lh3.googleusercontent.com/h09p9JZfve3VOMFGkUt9uwHsb97niY2RnKvh5nGyTT_6NFtGSXA0HSFnqR8NRad9uIO0fKK1wPw1K77fJXJ2ZzqBtmDvgJK-1XbvNP-Ybgg4jxYCXqjaufBzgwj-eIZB7JrDqbyxFql9Z1HQ5BLXLow)
+
+And the file structure of our Frontend along with their code work is as follows:
+
+![](https://lh5.googleusercontent.com/nn-1TPjj9UQJXLDKlUlhnrL-8_BqpcxnqZaGtodQW3aBJB0nL_qNQKhuwd4Udv7x52GkHbejYmxXPgCRSWhAW0zaDmGZya-maBwv4WY0_K2VyWo8MSU1h0gUfP9niqOHSTMHiGfxoUfapksgvcPJGV4)
+
+#### Just Three Event Handlers You Need To Focus On
+
+**Event Handler #1:** `handleChange`: An event Handler that gets triggered when the user selects an image
+
+```javascript:index.tsx
+...
+// Event handler that is triggered when the user selects an image
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files![0];
+    if (file) {
+      const modifiedFileName = `${dayjs().format("DD-MM-YYYY-HH-mm-ss")}-${
+        file.name
+      }`;
+      const modifiedFile = new File([file], modifiedFileName, {
+        type: file.type,
+      });
+
+
+      setPhoto(modifiedFile);
+    }
+  };
+  // This `useEffect()` gets triggered whenever the `photo` state changes
+  useEffect(() => {
+    if (!photo) {
+      setPhoto(null);
+      return;
+    }
+    // URL.createObjectURL() creates a DOMString containing a URL representing the object given in the parameter
+    // In simple terms, it creates a blob URL from the file which is quite long and unique to temporarily display the image
+    const objectUrl = URL.createObjectURL(photo);
+    setPreview(objectUrl);
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [photo]);
+...
+```
+
+**Explanation:** The simple explanation for the above code is as follows:
+
+- When a user selects an image, `setPhoto` stores that file, and now as the state of `photo` has changed this triggers `useEffect()` hook which in turn triggers another state setter named `setAvatar` that stores the temporary blob URL of the image for a temporary display. And `dayjs` is simply modifying the file’s name.
+
+That’s it! There’s nothing more complicated happening other than this in the above code.
+
+**Event Handler #2:** `handleClick`: Trigger when the user clicks the `upload to server` button
+
+```javascript:index.tsx
+// This function is triggered when the user clicks the upload button
+  const handleUpload = async () => {
+    if (!photo) {
+      toast.error("Please select an image to upload");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("image-file", photo as File);
+    console.log(formData); // formData will always show as an empty object in the console
+    try {
+      const response = axios.post(
+        "http://localhost:5000/api/upload",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      toast.promise(response, {
+        loading: "Uploading...",
+        success: "Uploaded successfully",
+        error: "Failed to upload",
+      });
+      await response;
+
+      mutate();
+      setPreview(null);
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+```
+
+**Explanation:** Here we are just uploading the image. Note that the `axiosConfig` must be set to `”Content-Type”: “multipart/form-data”`since by default it is set to JSON. Just as a matter of fact if you `console.log(formData)` you see nothing in the logs because a file cannot be logged in a console.
+
+- The name `”image-file”` is damn important since `multer` in the backend should know the object key `FormData{“image-file”: File}` in the formData to upload the image into the folder.
+- So, if you want to change the name `image-file` you need to change it in both the client and server.
+
+**Event Handler #3:** Triggered when the user clicks the delete button
+
+```javascript:ImagesGrid.tsx
+const handleDelete = async (image: string) => {
+    try {
+      const response = axios.delete(`http://localhost:5000/api/${image}`);
+      toast.promise(response, {
+        loading: "Deleting...",
+        success: "Deleted successfully",
+        error: "Failed to delete",
+      });
+      await response;
+      mutate();
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+```
+
+**Explanation:** This basically just sends a delete API request to the backend. Note that `mutate()` is offered by the `useSWR()` hook to re-fetch all images again since we need to update the UI after deleting an image.
+
+Literally, if you believe me or not, this is all you need to know about the Frontend and all the remaining code will never bother you much. Congratulations!! You now understood the front-end code pretty well.
+
+## CRUD Operations in the Backend with a verified API key
+
+This is the final section of this blog you need to skim through to complete your exhausting journey!!
+
+**Verification before executing the `uploadImageToFolder`, `createImage`, and `deleteImage` functions for security**
+
+If anybody can make a post request on your server, then your folder will be flooded with images. We don’t want that to happen, right? So, the solution is this: provide a key to the client and verify it whenever he/she wants to upload or delete an image.
+
+```javascript:authController.js
+import bcrypt from "bcryptjs";
+
+
+export const verifyAPIKey = catchAsync(async (req, res, next) => {
+    let api_key;
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+      api_key = req.headers.authorization.split(" ")[1];
+    }
+
+    if (!api_key) {
+      return next(new AppError("Not authorized to access this route", 401));
+    }
+
+    try {
+      const isMatch = bcrypt.compare(
+           api_key,
+        process.env.SECRET_API_ENCRYPTION_KEY
+      );
+      if (!isMatch) {
+        return next(new AppError("Denied access since API key is invalid", 401));
+      }
+      next();
+    } catch (error) {
+      return next(new AppError("Not authorized to access this route", 401));
+    }
+});
+
+```
+And there after the verification of the api key, execute the `uploadImageToFolder`, `createImage`, and `deleteImage` functions. Route handlers `uploadImageToFolder`, `createImage` are shown below:
+
+```javascript:imageController.js
+export const uploadImageToFolder = catchAsync(async (req, res, next) => {
+  upload.single("image-file")(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json(err);
+    } else if (err) {
+      return res.status(500).json(err);
+    }
+    next();
+  });
+});
+...
+export const createImage = catchAsync(async (req, res, next) => {
+  var response = {
+    result: [
+      {
+        url: req.file.path,
+        name: req.file.originalname,
+        size: req.file.size,
+      },
+    ],
+  };
+  res.status(201).json({
+    status: "success",
+    data: {
+      response,
+    },
+  });
+});
+
+```
+
+Here's the route handler for deleting an image.
+
+```javascript:imageController.js
+export const deleteImage = catchAsync(async (req, res, next) => {
+  try {
+    var filePath = req.params.filename;
+    filePath = `YourFolderPath/Backend-NodeJS-Express/controllers/../uploads/${filePath}`;
+    // Delete file from uploads folder. For example if filePath is 'uploads/abc.jpg' then file 'abc.jpg' will be deleted from uploads folder.
+    fs.unlink(filePath, function (err) {
+      if (err) {
+        return next(new AppError("File not found", 404));
+      }
+      console.log("File deleted!");
+      return res.send("File deleted successfully.");
+    });
+  } catch (error) {
+    return next(new AppError("Error deleting file", 500));
+  }
+});
+
+```
+
+Here’s an illustration for better comprehension of the above code
+
+![](https://lh3.googleusercontent.com/32KeCJRC8HynkMa-4brv80I5Ysk0JDAAZq6F03YKPNXBcTXpBQ532IvkMvOZfPXerX8dxBZbBV0TXl9sXAB9Vwt_04IPSJ29ZCM0qrYzPPzRxDe0keK_LhSVOOUBmYc-kDmghOfu6pj8QvTPcXjGZkY)
+
+Route handler that displays an image
+
+```javascript:imageController.js
+export const getImage = catchAsync(async (req, res, next) => {
+  const { w, q } = req.query;
+
+
+  const { filename } = req.params;
+  //   const filePath = `${__dirname}/uploads/${filename}`;
+  const filePath = `YourFolderPath/Backend-NodeJS-Express/controllers/../uploads/${filename}`;
+  const file = fs.readFileSync(filePath);
+  const image = sharp(file);
+  if (w || q) {
+    // fit: cover scales the image to cover the provided dimensions, cropping any parts of the image that do not fit.
+    image.resize({ width: Number(w) });
+    image.jpeg({ quality: Number(q) });
+  }
+  image
+    .toBuffer()
+    .then((data) => {
+      res.set("Content-Type", "image/jpeg");
+      res.send(data);
+    })
+    .catch((err) => {
+      return next(new AppError(`Error: ${err}`, 500));
+    });
+});
+```
+
+Route handler that fetches all the images
+
+```javascript:imageController.js
+export const getImages = catchAsync(async (req, res, next) => {
+  const images = fs.readdirSync(`${filePath}/../uploads`);
+  // Sort images by date modified
+  images.sort(function (a, b) {
+        return fs.statSync(`${filePath}/../uploads/${b}`).mtime.getTime() - fs.statSync(`${filePath}/../uploads/${a}`).mtime.getTime();});
+
+
+  res.status(200).json({
+    status: "success",
+    results: images.length,
+    data: {
+      images,
+    },
+  });
+});
+```
+
+That’s all the fuss about the backend code you need to carry your thought forward. If you’re wondering why didn’t we have any `update/replace` operations, since updating or replacing images is nothing but deleting and creating a new image. You can pretty much assume update = delete + create.
+
+Congratulations again! You stayed till the end! That’s freaking awesome. Hope you learned something to ponder upon or question about.

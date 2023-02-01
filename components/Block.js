@@ -24,7 +24,10 @@ const Block = ({ children, type, color = '#A020F0' }) => {
         <div className="pl-10 font-medium">{children}</div>
       </div>
     )
+  } else if (type === 'link') {
+    return <center className="text-sm font-medium text-gray-500">{children}</center>
   }
+
   return <div>{children}</div>
 }
 
