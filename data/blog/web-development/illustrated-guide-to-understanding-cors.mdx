@@ -1,0 +1,295 @@
+---
+title: 'Illustrated Guide to Understanding CORS'
+date: '2023-02-05'
+tags: ['web-development', 'javascript']
+draft: false
+layout: PostSimple
+summary: "This blog provides a comprehensive and accessible guide to Cross-Origin Resource Sharing (CORS), a security feature implemented by web browsers to prevent a web page from making requests to a different domain than the one that served the web page. With the help of clear illustrations, readers will learn the basics of CORS, including what it is, why it's important, and how it works."
+---
+
+![](https://lh3.googleusercontent.com/QrUEG0TcDPB7gOhh9VHVk9ZEIekrN9on2HxDwNRlAXU6-uTjm3oGG2zZ2L7yhW2TfEIW0T8NPoDkIvzkSglVUnjKYYWPvxyWnW0nle8SWePZ4DVcsrxPbEBHSVXZe6KpRyypMmH4F24m9XF5D6cV5HI)
+
+<Block type="link">Figure: Client-Browser-Server Architecture</Block>
+<TOCInline toc={props.toc} asDisclosure />
+
+
+
+If you’re a person who has a habit of building websites, then you must have dealt with the following CORS errors popping up in your console out of nowhere. 
+
+
+
+![](https://lh3.googleusercontent.com/WZZLbvsxHtE-Qt0JYBD3US_qRuYPHXLSW15JIFJGMDX8SN68lZYpTAydVSlPL2zUco2E8AxT6e47fh15HKHQizOVqCYGro8cliW3TLKMd8j-vDQYM8NUkSWV8EXKZT9ggD6-ozGgUc8zzSdm5otfTBA)
+
+<Block type="link">Figure: List of all CORS errors</Block>
+
+
+
+Well, you’re not alone! Many web developers come across this “CORS” problem every single day. After receiving a good number of CORS errors as a naive person the one phrase I observed very often was `No ‘Access-Control-Allow-Origin header’ is present on the requested resource`.  At first, I couldn’t figure out what exactly the `requested resource` is referring to and later I understood that it is referring to the server rather than the client. 
+
+
+
+Now, the question still stands firm “What is CORS? Why are browsers not allowing responses that do not have specific headers in the response?”. Well, the straightaway answer is “security”. After all, you don’t want your servers to send a response to each and every single client who sends a request to the servers, correct?
+
+
+
+Here’s what I’m going to do to make your knowledge about CORS concrete. You can set up a [NodeJS ](https://nodejs.org/en/)& [Express](https://expressjs.com/) server running on localhost:5000 and a [React](https://reactjs.org/) app powered by [Vite](https://vitejs.dev/guide/) on localhost:3000. However, I'll present some code snippets to wrap your minds around. By the way I hope you know about Vite React, as as far I know it’s something that reduces your time to set up a React app exponentially.
+
+
+
+Here’s a simple server-side code:
+
+```javascript:index.js
+const express = require('express')
+const cors = require(‘cors’)
+const app = express()
+const port = 3000
+// No app.use(cors()) included here
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+```
+
+Let’s see what happens if we haven’t included any `app.use(cors())` middleware in our NodeJS server. I haven’t got any CORS error for `GET` request, however, when I made a `POST` request I had the following in my network console. 
+
+
+
+![](https://lh3.googleusercontent.com/Ia-zTH-X9d2FrojnwoEzKPjKSE1k3COVNuwzDXAxkNcHWzmUlwc2rI2hBOwjzTe8t4BkMoiqE0-h8tFVx-iowYVtfP1_r3fGqTVXhBEdmXN1TnSuZDXOhrChPUq_tQ6rY92JvguZOdOUPPFjgJdpp7c)
+
+
+
+The above picture tells us that the preflight request is successful but the actual POST request isn’t. Let me present the info inside the above two requests.
+
+![](https://lh5.googleusercontent.com/pvwP4IcNHbIDUnnJkgSDzrlsyyFXkE0WXWzRUZjIrgz-HxqOrBh-rCpYkHUK2eRgruVG_oXJ-NumJsmI_xTqVcBo4GBy5eMFV43xXVyOhhyCGeydawS7Z1I7f12C7BvEz_W_E2zMpRS4jEm8z1HrFVM)
+
+<Block type="link">Figure: Request and response headers for preflight and post requests during an unsuccessful post request.</Block>
+
+
+
+And following is the error in the browser console.
+
+
+
+![](https://lh4.googleusercontent.com/g1pCntRyc1W0iYqHVcKXZPdOYtcjGDIp7iAiJd9ODnAmKOOFPap5pRGV6V4mAs7PQRcGUqv5kT72N_PYGswLTqD3GxZv1EnAVjsxSd6S5IdRG22zulllsFPRRmPda6j98OfYSw6c17V4Emez4pQo9HI)
+
+
+
+**Explanation:**
+
+- First of all, the important point to note here is our POST request hasn’t even reached the server. But the web browser somehow is able to know that there isn’t any `Access-Control-Allow-Origin` header present in the requested resource. How?
+- It is because of preflight request that is sent by the browser before the actual request to check whether the server will allow the cross-origin request, based on its CORS policy. 
+- If the preflight request receives a response with the Access-Control-Allow-Origin header, indicating that the actual request will be allowed, then the browser will send the actual request to the server. If not, the browser will block the response before it reaches the client. And that is indeed what happened here.
+- To make the above three points more convincing, if you notice there is no cors error for a `GET` request (unless a custom header is added to the request on the client side) even if haven't included `app.use(cors())`. Since there is no preflight request made for `GET` request hence no CORs error. But as mentioned if you add any custom headers to your request and if `app.use(cors())` is not included then there will be a CORS error for the `GET` request too.
+
+
+
+Here’s an illustration for the above explanation
+
+
+
+![](https://lh5.googleusercontent.com/c0JQOpVY2cRj46rwsSq4UDNynYbormcCK0rOaOdw6-BNxufqrpIOG3ZzKAEBNnZkZ740PbbCNwOhrMyvZW-sWBufVKyauGkHUqNcgNYmQ3ydfE3jZ3ViTG5svwehBELuQBNIdHoxfUFQT6hrkSe7o8k)
+
+<Block type="link">Figure: Illustration of what happens during a CORS error</Block>
+
+
+Let's include `app.use(cors())` inside our server code. Let's see what happens now.
+
+```javascript:index.js {5}
+const express = require('express')
+const cors = require(‘cors’)
+const app = express()
+const port = 3000
+app.use(cors()) 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+```
+
+![](https://lh5.googleusercontent.com/fMh9_Jll_NsYCuq4MfPhFXy0_PgxxSFB9ymo-KukUl7Qnw7VnzqxS3VHYa087sxvSXOUXb1llQ3oiG4lTXU0E5UEbi_AYjQGrpOKkuoRprRbicGqHk_QFN6SLPLNqkH-IzplndXNpCzGwoby-dVnSRk)
+
+
+
+Hurray! Now our POST request is successful. But what is the difference that has happened now? Let’s uncover that.
+
+
+
+
+![](https://lh6.googleusercontent.com/6q3jaIFFWEchNq3SaAkRitYA9N0YgfeinXhcCIOroxiR1-W1zR9-ZuuuP8eF6uQTXywnkA4ieacrzGU-ugFQGbbpdzJ0NgFGVdfAmrxkFZ9wjLqfiWND16aJ2lMRBttP-UgIbNTgahbMZJy3RHWGTHU)
+
+<Block type="link">Figure: Request and response headers for preflight and post requests during a successful post request.</Block>
+
+
+
+
+
+By seeing the above pictures, we can right away assert that some extra headers have been added to the response. And this is indeed done by the `cors` package. 
+
+
+
+
+
+
+Here’s an illustration of what’s happening for the above successful POST request.
+
+![](https://lh3.googleusercontent.com/dXrqKs2tRfS8Z_US2IwlNqpj2Nm6Hx7vNhnDvNKW7eTMuX9gz9eMRhA6ok3_fxOHgYxEwayKuj7tYS-Jh50dv_Vv0RE24mC_zO4K2CCfQyJjqUlLVEmlIB9Oybu7euBsNjzlB2hq4fTQGQXLLg5W9KE)
+
+<Block type="link">Figure: Illustration of what happens when we bypass a CORS error</Block>
+
+
+
+
+## Effect of Custom Headers
+
+#### With Custom Headers
+
+```js
+import axios from "axios";
+
+
+const API = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_IMAGE_API_URL,
+});
+
+
+const axiosConfig = {
+  headers: {
+    "Content-Type": "multipart/form-data",
+    "Authorization": `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
+  },
+};
+
+
+export const getImages = (url: string) => API.get(url, axiosConfig);
+```
+
+
+
+The above code snippet is from the tutorial [Build your own image server using NodeJS & Express](https://dinakar.co.in/blog/advanced-guide-for-building-your-own-server-step-by-step-guide). You can see custom headers are set in the Axios for the `GET request`. So a preflight request will be sent by the browser.
+
+
+
+#### Without Custom Headers
+
+```js
+export const getImages = (url: string) => API.get(url);
+```
+
+You can see that there are no custom headers in the above GET request. Hence there will be no preflight request sent by the browser and there will be no cors error even if you haven’t included in `app.use(cors())` in your server-side code.
+
+
+
+![](https://lh4.googleusercontent.com/MozunnDz4zvVcb6z2x0W5aGi72YwcS6O4_2NpNEfQ-THbTz8yfDNbYQYYJK6k-OeJe-ZeLyIkwmg_9PLpGhpVJue0N6BhV0F2ybyC1bivZQn93zpCpvhkzxdkyMDuSINNcvIV0lQtgyPmW8r1d_v7ow)
+
+<Block type="link">Figure: Preflight request assists to find more about the server’s response by checking the headers it gets through this preflight request.</Block>
+
+
+
+
+## The Best CORS practice
+
+```js 
+app.use(cors({origin: "https://www.onlyallowme.com"}));
+```
+
+It is always a best security practice to set cors origin to a specific site. That is, only allow a specific client URL to receive a response from the server. And follwing error will be thrown if the client URL is not the same as the one set in the server.
+
+![](https://lh5.googleusercontent.com/fcwuCwqPPQw5ELJ76uTR9pCcshIddIwFqNoIe2sg7Bfkk6TzW2kpnL3IbXFDs5Awuau__1uHaKnzwdkUlW56tq54e9pZFmXf7GGcLJqgitH21JAz8PFJQSvsmkQP3uQGHe_oukyL_BV5VgpsynS8g2A)
+
+
+
+That’s a wrap, folks! So far, we’ve unwrapped the details of what happens during a CORS error and also the details of when we bypass a CORS error. And we finished with the best CORS  practice i.e., to set the server to allow a specific site to access its resources.
+
+
+
+I’ll finish off this blog with answers to some frequently asked questions. Disclaimer is that this is optional. 
+
+## FAQ on CORS
+
+#### What is CORS, and why it is used?
+
+
+
+CORS stands for "Cross-Origin Resource Sharing." It is a security feature that is implemented by web browsers to prevent a web page from making requests to a different domain than the one that served the web page.
+
+
+
+For example, imagine that you are visiting a website called "example1.com" and this website is trying to load some data from "example2.com". If the web browser did not have CORS in place, it would allow "example1.com" to access the data from "example2.com" without any issues. However, with CORS, the web browser will first check with "example2.com" to see if it is okay for "example1.com" to access the data. If "example2.com" says it is okay, then the data will be loaded, otherwise, the web browser will block the request and the data will not be loaded.
+
+
+
+This is done to keep your data safe and prevent malicious websites from stealing your personal information. CORS is important because it helps protect your data from being accessed by unauthorized websites.
+
+
+
+#### How CORS works
+
+
+
+When a website makes a request to a different domain, the web browser will first check if the request is allowed by CORS. The way it does this is by checking for certain headers in the request and response. These headers are special instructions that tell the web browser whether or not to allow the request.
+
+
+
+When the website (example1.com) makes the request to another domain (example2.com), it includes an "Origin" header in the request. This header tells example2.com the origin of the request, i.e the domain from where the request is coming.
+
+
+
+When example2.com receives the request, it checks the "Origin" header and then sends back a response with certain headers to indicate whether or not it will allow the request. One of the headers is the "Access-Control-Allow-Origin" header. If this header has the value "*" or the origin of the request, that means that example2.com allows the request from example1.com and the browser will proceed with the request. If the value of this header is different from the origin of the request, this means that the request is not allowed and the browser will block the request.
+
+
+
+It's important to note that the headers in the request and response are part of the HTTP protocol and are invisible to the end-users but are crucial for the browser to determine whether the request is allowed or not.
+
+
+
+
+
+#### The difference between a simple and a preflight request
+
+When a website makes a request to a different domain, it can either make a simple request or a preflight request.
+
+
+
+A simple request is like asking a question directly to a person. You just ask the question and get an answer. For example, "Can I have a glass of water?" the person will either say "yes" or "no." Similarly, a simple request is a request that only uses the HTTP methods GET, POST, or HEAD and it only needs to check the headers in the response, like the "Access-Control-Allow-Origin" header.
+
+
+
+On the other hand, a preflight request is like asking a person's permission before asking a question. For example, "Can I ask you a question?" the person will either say "yes" or "no." Similarly, a preflight request is a request that uses other HTTP methods besides GET, POST, or HEAD, such as PUT or DELETE. Before the browser makes the actual request, it first sends a preflight request using the HTTP method OPTIONS to check if the server will allow the actual request. This request checks the headers in both the request and response, like the "Access-Control-Allow-Origin" and "Access-Control-Allow-Methods" headers.
+
+
+
+In summary, simple requests only require a single round of permission check, while preflight requests require an extra round of permission check before the actual request.
+
+
+
+#### The CORS headers (e.g. Origin, Access-Control-Allow-Origin)
+
+
+
+When a website makes a request to a different domain, certain headers are used to indicate whether or not the request is allowed by CORS. These headers are sent in the request and response to communicate information about the request. Here are a few examples of important headers that are used in CORS:
+
+
+- Origin: This header is sent in the request and tells the server the origin of the request, i.e the domain from where the request is coming.
+
+
+
+- [Access-Control-Allow-Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin): This header is sent in the response and tells the browser if the request is allowed or not. If the value of this header is "*" or the origin of the request, that means that the request is allowed. If the value of this header is different from the origin of the request, that means that the request is not allowed.
+- [Access-Control-Allow-Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods): This header is sent in the response and tells the browser which HTTP methods are allowed for the request. For example, "GET, POST, PUT"
+- [Access-Control-Allow-Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers): This header is sent in the response and tells the browser which headers are allowed in the request.
+- [Access-Control-Allow-Credentials](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials): This header is sent in the response and tells the browser if it's allowed to send credentials (such as cookies) with the request.
+- [Access-Control-Max-Age](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age): This header is sent in the response and tells the browser how long the preflight response should be cached by the browser.
+
+
+
+These headers are the key components of CORS and are necessary for the browser to determine whether the request is allowed or not.
+
+## References
+
+[https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+

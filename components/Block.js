@@ -25,7 +25,7 @@ const Block = ({ children, type, color = '#A020F0' }) => {
       </div>
     )
   } else if (type === 'link') {
-    return <center className="text-sm font-medium text-gray-500">{children}</center>
+    return <center className="mb-6 text-sm font-medium text-gray-500">{children}</center>
   }
 
   return <div>{children}</div>
