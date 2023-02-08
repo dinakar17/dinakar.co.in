@@ -1,0 +1,303 @@
+---
+title: 'Exploring GPT-3: A Comprehensive Illustrative Guide to the AI Behind ChatGPT'
+date: '2023-02-08'
+tags: ['nlp', 'chatGPT']
+draft: false
+layout: PostSimple
+summary: "GPT-3 is revolutionizing the world of AI and language processing. As the driving force behind ChatGPT, it's essential to understand what GPT-3 is, how it works, and what it's capable of. In this blog, we will explore GPT-3 through an illustrated guide, breaking down its inner workings and explaining its capabilities in an easy-to-understand manner. Whether you're a tech enthusiast or just curious about the future of AI, this blog will provide valuable insights into the power of GPT-3."
+---
+
+![](https://lh5.googleusercontent.com/ogBe8jYfIN8BJDKN3GEFROIxFFB0NtzfGPklSl30LS8I_qm4T_dGBMtz9X_nzbtVp3t5kW1jD3isbx3nY6i-S1uGVWUozOSCPL0dnciTvg5ona7kiYVzlD1Zs81U8kDiHwnYIn5K1mjoe1bgF3Fb-wY)
+
+
+
+## Introduction
+
+GPT-3 is a phenomenal thing that has happened in NLP history. For the first time ever, people are able to see Large Language Models (LLMs) generating human-like text  (publicly). The fact that GPT-3 is able to generate text that is incredibly difficult to distinguish whether it is written by a human or an AI is an incredible feat to achieve.
+
+
+
+Before diving into the details, here’s the outline of the entire blog we’re going to journey through to understand the working principles of GPT-3.
+
+
+
+
+![](https://lh4.googleusercontent.com/2MQ8L7gk33NXDkx_Tj14DI7R18rnIFcy5HlR3jJHEUjbQv4Kwc4WdeNOSAbWfJYyW7TT4ptFpAfEDWOdYqZVO6qWSc-BuOCYkp7gSpo_zg01k9Cu6_yLhpBQIEkPmv9ijwfu-tyf3XvFGwdhDpiPiZM)
+
+Figure: Flow diagram indicating the process of understanding a machine learning task.
+
+## Datasets used to train GPT-3
+
+![](https://lh3.googleusercontent.com/u8f2u_44zEKMqDUWhZyv7WbyPeHHszPNJI6beDSYY4x7RFu3iGKfH4fUdj0rgFMSoYZAVwmlbG1zuXi8OZyNc6cH0g1KNa6yvAAG4Llts46_sLMW_8yWFbAbZahIef-xRFLiFeQ1KNorlv-HY0gUBjs)
+
+Figure: Demonstrating the quantity of the dataset used to train GPT-3
+
+
+
+**Datasets for language models have rapidly expanded, culminating in the Common Crawl dataset constituting nearly a trillion words.**
+
+![](https://lh3.googleusercontent.com/RMlU3_zrzSGxv1nPHTljRFjvTyVL4tWMHFrmEXChdY9M4_ypOAFGwmYtAwsNZCR8WaAZympZz_6ytHLfCRo2nyEHAlIu_Asd9vtUfX5F7v9coX0wJv-i3pMOqrPCeqV30hqXvKm9KTPhIgpHJveJ14w)
+
+Figure: Common Crawl’s latest crawled data (November/December 2022) 
+
+
+
+Fact: Google also crawls the entire world wide web to train their search engines but they do not publish them publicly as Common Crawl does. 
+
+![](https://lh6.googleusercontent.com/gAI3p6ADqvf7oQjVbFJ7GKxy7v60o8iQjYEIF5d-B-f5ive9FsK2aqWITei274endVz0UEoQdiSx5UTHIYmiWW9jxToaEG4GzPO_vJ_xSN0Hq4hBy3wA9RNrCJCuOnTHH_Trz5_5XCWHIUWQ61FaxG4)
+
+Figure: These are the datasets that have been utilized to train GPT-3. 
+
+
+
+**What is WebText2?**
+
+
+
+Here’s what OpenAI mentioned about WebText in their GPT-2 research paper:
+
+
+
+“Manually filtering a full web scrape would be exceptionally expensive so as a starting point, we scraped all outbound links from Reddit, a social media platform, which received at least 3 karma. The resulting dataset, WebText, contains the text subset of these **45 million links**. … contains slightly over **8 million documents** for a total of **40 GB of text**.” 
+
+
+
+WebText2 is an extension of WebText with more links, documents, and huge gigabytes of text. 
+
+
+
+![](https://lh3.googleusercontent.com/jD-78hSd7Vp40hS_bWu0YOFf0b6hKK808oBcaVHF-tehsN9-gNWrIi7MnS7kXGNEvPOF3YOWbOCq7LLzykL5L89-_VvKun7etSgd_T_X3QyThu1q3CrQ0yPkZ8hr8OIR3h9EOhIRL0IJKYh4ZlSH2Ak)
+
+Though, it’s not really useful for ordinary people to know about these gigantic datasets. Since in reality, a normal developer cannot have the resources and infrastructure that could store these and train the models. But the concepts behind pre-processing/cleaning/filtering them is something worth giving attention to. 
+
+
+
+So, the above theory is just a theory, not anything to ponder upon.
+
+
+
+#### Pre-Processing/Cleaning/Filtering the Datasets
+
+
+
+**Task 1: Improve the Quality of the Datasets collected**
+
+They have done three things to improve the quality of the datasets 
+
+1. Filtered a version of CommonCrawl based on similarity to a range of high-quality reference corpora
+2. Performed fuzzy deduplication at the document level, within and across datasets, to prevent redundancy and preserve the integrity of our held-out validation set as an accurate measure of overfitting
+3. Added known high-quality reference corpora (WebText2, Books1, Books2, Wikipedia) to the training mix to augment CommonCrawl and increase its diversity.
+
+
+
+The Interesting thing to note here is that to understand both points 1 and 2 we need another blog post. And also it is important to understand that no matter how brilliant your model is if you don’t give proper attention to filtering, and splitting your dataset properly into train, test, and validation sets without any overlapping (**data contamination)**, your efforts will go in vain. **So understanding and working with the dataset should be anyone’s first priority over the model’s architecture.** That’s the reason for the above three additional steps for improving the quality of the datasets.
+
+
+
+![](https://lh6.googleusercontent.com/ihpFkPi_81PgTaOy2H4ptqAmlY2Hn8LLjIRQwSji8hyPiATS2Uoq-FbpUzolsj5V-r6AnmPv4sxFBiLHsheed29fQZiaVN3YEnZgyIRO6HJWRKuBo4w5r-Lvug-_11n306FDr8pCSKJWb8K5G3mfF88)
+
+Figure: Picture depicting the importance of handling dataset over model’s architecture
+
+
+
+Here’s the illustration for the basic process that any NLP dataset goes through. 
+
+![](https://lh6.googleusercontent.com/85WXRIlhClC7nsy3qs_KKDr7gnQHWrpTOseLMpxlu7PXhEL1wZDoGwQD5GqnNNuEt1VEMbNrS1P3MJrYpK7tn1Am59SRlNoanSsnmRL12THBrywhdLCpMqALWEy-RdYcTAF5cIniwZEkjdCAkkE1qyk)
+
+At a very broad level, if you think about what we should do next after cleaning, and filtering the dataset, we need to do two things: 
+
+#### Tokenization for creating a dictionary of tokens to lookup 
+
+We need to form a vocabulary of tokens and we need a data compression algorithm for that. (Ex: **Byte-pair encoding(BPE)** algorithm).
+
+
+
+Do not ignore this point! This is really something big to give your full attention to. The answer to the question “How we can process a document containing text which is made of words at a broad level or of characters at a subtle level?” is damn important to find out.
+
+
+
+Let’s learn about this Tokenization through an illustration with the [OpenAI tokenizer](https://platform.openai.com/tokenizer).
+
+
+
+![](https://lh3.googleusercontent.com/OcOJV2LacSmeuj_Waf2cvwH0PY3glOb0NCzbOY-Qy9MVSFNVLgssPlYgYWkm98fhoxU_tqovgyPdZEPDgdrNRQrn5O5J0LDBaqByASNrmTnhhFvUKI525ZmoFlbtD9ph4qO3AAwjpcYGp7gLxZ1iU80)
+
+
+
+“A helpful rule of thumb is that one token generally corresponds to ~4 characters of text for common English text. This translates to roughly ¾ of a word (so 100 tokens ~= 75 words).”
+
+
+
+If you think  **“**Why can’t I divide this into word-level tokens where each token is a word?” the answer is fairly simple. It makes vocabulary size grow along with the dataset. Digging into more detail, having word-level tokens vocabulary is never a good idea. Since we can have thousands to millions of unique words in huge datasets, this means we should have 1 million neurons (let’s vocabulary size is 1 million) in the output layer to predict the next word given a sequence of words that is computationally expensive. So if the model needs to predict the next word it has to look up the entire 1 million words to find the next word. 
+
+
+
+One sentence explanation for the above paragraph is, our aim is to have a vocabulary size of smaller size no matter how many unique words we have in our dataset.
+
+
+
+**Doubt:** Why can’t tokenization be done at the character level? At the character level, you will have a fixed and small vocabulary size.
+
+![](https://lh5.googleusercontent.com/NQ1OHGq1PBEq1fBjvxmjC45pBjwW4FFwiIKdjyWWwRTFw8jVqyKIBXsfjKGdG_WLW6zoUKi-0jea6J8S0R7fpJoKhentlfuItvibvmfjQB5_wRweSz2ujmrmIoQjHKWpHcNGnmRMzKUarcvW5T2NmlY)
+
+
+
+#### Embedding: Converting tokens to a vector of floating numbers
+
+
+
+These embedding algorithms evolved over time. Here’s the timeline along with a brief explanation.
+
+![](https://lh6.googleusercontent.com/uAUwLBslyhsfJRNmnnAMWYMtWpMa9yd_WHIUGnOgHQ7sWxRJoAXRj1OB9kOfAHeYtPDzUTDd9XAADX9WTdcEsWhPWH78VGQrwvUffPI0yvl1VkW7sm7r3tlwP9aAWgpmx5l8CrQaAw7CINNX9ikyKkc)
+
+
+
+![](https://lh5.googleusercontent.com/WpnYk-rBS-WRbzRyXuONJmtppEvaW0dQVWWIUmlHdyiskM0YNmXeSkQ0oKdzqPV2VPDsHxnJfNXr3S-RwMgwK03L5lwBcqwsJOyEUvGewO7YfMaKGRd0Jlvl-sMaYdPs9L9jrPMoOhc1mhNca61tIBo)
+
+
+
+Figure: Evolution of Embedding Algorithms over time
+
+
+
+But OpenAI GPT-3 did not use any of these pre-trained vectors for their tokens. Instead, OpenAI GPT uses the Transformer-based language model architecture and **trains its word embeddings during the model training process (in other words from scratch)**. It does not use ELMo (Embeddings from Language Models) which is a deep contextualized word representation method.
+
+
+
+#### Summary So far
+
+![](https://lh6.googleusercontent.com/OoqFqaxqjIkpHSAO5dASlCXR6DLhiAAycSSD2cq-YNkMPQawAxmeVBoSL8r01Mg8ZyBxujn0GUF7FzgoWtS8EGkgHGEkzDjjyr5Wk1mdD6MOF_qSi8pv4I1l2h9KJhiXKGhjb8SDoRFFu1Wj3EinPho)
+
+Figure: The general process for processing a dataset for natural language processing tasks
+
+
+
+If you’re curious to know the details of Word Embedding and data compression algorithms give these blogs a read. 
+
+
+
+That’s enough of dealing with the complexity of dataset information. Time to look at another interesting part: GPT-3’s Model Architecture. 
+
+
+
+
+## Model’s Architecture
+
+
+
+Prerequisites before skimming through this section:
+
+- Better Understanding of how Transformers work 
+- How decoders in Transformers work
+- In transformers, the difference between self-attention, attention, and cross-attention
+- How a Masked Multi-Head Self-attention Layer works
+
+
+
+![](https://lh5.googleusercontent.com/HqT4xX7Oy0VMK6_uyE3y90gJkz_7XqU5gDsjBpbkRvLxLmFojPb7HKCGi6IZXNx_EP10BiyNLskqi-3oBWuenTY_flallo6d5s341ya3cg9v3NATshEyEXLog_eH9ZilrvpCujQXJKNGyrzFkD3y5eI)
+
+Figure: GPT-3’s Model architecture at a broader level
+
+
+
+Believe me or not the above picture you’re looking at is exactly what happens but at a great scale i.e., the vectors in the above are quite bigger in the actual GPT-3 model. Indeed, the same vectors with the same size come out of GPT-3 model as shown in the picture. And this flow of vectors continues and that number is 300 billion!! There is another important point you have to remember. The above example (“GPT is Incredibly Powerful Model” (let’s say the target is “Model”)) constitutes 4 more examples for the model to train on. Here’s an illustration of what I mean.
+
+
+
+![](https://lh4.googleusercontent.com/aUM1h3_NuOWV2vYWlc7FUb41fgyzBQLTWhwiDsM5NOD4h-hDmxwPEI7ku_HC3Yr0kxKhooxDn5bg1POXKNkqTVWY2JIB47eTy8SSrm2A0WmYnd1q9xJ0AT313zPBQbwPP8GCVsqLhIglitYQswygUzY)
+
+Figure: Every sequence (let’s say of length n) will constitute n examples within. Here I placed words for better understanding but in code, those words are mapped to their corresponding indices in the vocabulary.
+
+
+
+
+And this happens for every sequence block we have. That is why the transformer’s decoder is known as an autoregressive model.
+
+
+
+
+Here’s the OpenAI statement about GPT-3’s model architecture:
+
+“We use the same model and architecture as GPT-2   including the modified initialization, pre-normalization, and reversible tokenization described therein, with the exception that we use **alternating dense and locally banded sparse attention patterns** in the layers of the transformer, similar to the **Sparse Transformer**” 
+
+
+
+And here’s their assertion on GPT-2’s model architecture:
+
+“Our language model is based on a Transformer architecture similar to OpenAI GPT with modifications such as input layer normalization, an added final layer normalization, and modified weight initialization. The vocabulary has been expanded to 50,257 and the context size increased to 1024 tokens with a larger batch size of 512. The residual layers have been scaled at initialization to improve performance.”
+
+
+
+Here’s what I hope you’re thinking right now
+
+![](https://lh3.googleusercontent.com/gfEFMC4dc1aIqva83MPyQ1Royc9bG4Rad-OYeyD8OPOzg8Ibvgm_KSNDplJdLRQA0dQ7wV04SSXZZdgf1tVzHY0hM88WvPeapGt4LsMnre6-OrBftFOdKaaXOE21PPn7HeQMcvJdhSzE2IX2vhvk1mE)
+
+
+
+
+Mathematical Intuition of Neural Networks
+
+
+
+At a broader mathematical level, the work neural networks do is nothing but take in matrices, and manipulate them by multiplying or adding them to another matrix resulting in another matrix.
+
+
+
+#### GPT’s Working through Illustrations
+
+
+
+![](https://lh5.googleusercontent.com/E208jkQuDFEKj6Faq8T4D3w3m81Za1euw72FF21qdu8pGdJg1w5v--Te1y5v7Oh0cu6mxVewEiSYM06-aMYV-RHjtxVRRnWMak6Lc3hxN0KOCCpnxPpvXad7JkByM78n8BwNE7uJa8YRJ8k_Q2ue3mE)
+
+
+
+Figure: The above figure shows how “tokens” (I have put words for understanding purposes) are translated to vectors by the embedding layer and corresponding sample input shape.
+
+
+
+![](https://lh5.googleusercontent.com/dZvXO1r__E9Ebxou_mPzJBPN0VORsHJyHjIhY4qEUcQvSiancsWMQfLRUwLdezoL9IM_MNAozg6FZ2qhYjLF1Sis5KGao4qbxcOXp2vd_TXHPwWZlgU7Uxd6jKuDVahc_53zRXIF6eIV8oZO0ORsNmc)
+
+![](https://lh5.googleusercontent.com/cz4eQ17rYXsLLu7EsSNeW25bFYa2f84DapW-Dx6KTK3jhg3BS6-5dcu5FZ8f-wjdNxt-lEp4JkgmViJev3RML2rQMgg7g-D79G_M7JNbrql3xL4RrGY-Gn5HxF70vZ_IrDB7_mUmpj-aw2Vj0lbnu5k)
+
+
+
+![](https://lh5.googleusercontent.com/0kf-0mU7EB_mCkepFewV0lj0BRSt0cAfefbeLt624C26g-m6F2blp_y06T53GE0HpRYgq0xV18lR1k6r84WLJemS-GpDJGhDD8w055R0p5zWPJEObI2eBWL4_jl79ZVX7tSm5WQOsy9E5CaWVZ5ZtoM)
+
+![](https://lh6.googleusercontent.com/AoZH4JhfUSPY56s92ooUOSgVq3B5Vqea9W0ErnQB3GKrycT62u7RH-zPxWd2_5u2Yy4yJgA6xQJ7S27425Dss6hNQSNa5EtdF01vvyyAPNdWt0EtLFpEKaOVlo0y0wA32woNGTUSyXwFd-fGQEENp-s)
+
+
+
+![](https://lh3.googleusercontent.com/8bTBltRnprXzWVae1dTqpZrRKQ5CEVtTNlfLCyGPmTTVo8S9EUIW07g8NzbncbOVyNcvecmm6vVl3-wo8r26tFgGa_IFwsSDgIPagknIQ2DIPoXZbZp8ps74aRTegCQ8y5mZE2qQy3owyafZh6XMH4A)
+
+
+
+Finally, Here’s a broader picture of the architecture of OpenAI GPT
+
+
+
+
+![](https://lh4.googleusercontent.com/IEzmbqqBRQqtViAdGBIgOiV4jMD3uYZS_5NRbZH8jKtV3XA7PyX5qh3UieBSqNzC-5RY2h_OirPoiwWRWBhTVKIOY4KB7dIeMHE0lxpLQLpvrEO6ZDnQv0Bf24GbbyNdmyNtUtxPx5V9VrMIB043ISY)
+
+Figure: OpenAI GPT Model’s architecture
+
+
+
+The above illustrations show how GPT processes a single sequence of tokens. The updated versions i.e., GPT-2, and GPT-3 are no different from this GPT except there are some differences in layers placement, and included are some changes in the weight initialization and some more which you have seen in the earlier paragraphs. 
+
+
+
+## Training Details of the Model
+
+
+
+Training Details of the Model at a theoretical level (i.e., omitting the number of GPUs, how they are used for parallelization, hardware failures, etc…) encompass information about the following:
+
+-  Hyperparameters i.e., number of decoder layers used, sequence length or context size, number of multi-heads used in masked self-attention layer, etc…
+-  Learning rate
+- Optimization scheme
+- Backpropagation algorithm used
+- Loss function utilized
+- Batch Size and so on…
+
+![](https://lh4.googleusercontent.com/Ugzh0yMKV9WBInu77Z5CMMoAFAQutfAlZuAvdJwbV1HXtkEBwZiFujZBvwK3JxQIxlRvdeWoJsIH-WT1zxKcwIyxfpxJJxz3g45KgE_CtEoDs4oPTN0XlU96-aZ0SKGknyRX4qE3PlCza_b80i7mCwE)
+
