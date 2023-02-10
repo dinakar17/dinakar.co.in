@@ -26,6 +26,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ['InterVariable', ...defaultTheme.fontFamily.sans],
+        poppins: ['"Poppins"', 'sans-serif'],
+        noto: ['"Noto Sans"', 'sans-serif'],
       },
       colors: {
         primary: colors.teal,

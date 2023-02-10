@@ -26,6 +26,19 @@ const Block = ({ children, type, color = '#A020F0' }) => {
     )
   } else if (type === 'link') {
     return <center className="mb-6 text-sm font-medium text-gray-500">{children}</center>
+  } else if (type === 'figure') {
+    return <center className="pb-6 font-noto text-sm font-medium text-gray-500">{children}</center>
+  } else if (type === 'question') {
+    return (
+      // just highlight the text
+      <span className="rounded-lg bg-yellow-100 font-poppins text-gray-600">{children}</span>
+    )
+  } else if (type === 'highlight') {
+    return (
+      <div className={`${color} text-md rounded-lg px-6 py-1 font-poppins text-gray-600`}>
+        {children}
+      </div>
+    )
   }
 
   return <div>{children}</div>
