@@ -1,0 +1,168 @@
+---
+title: 'The Story of Large Language Models(LLMs): Learn How They are Built from the Ground Up'
+date: '2023-02-24'
+tags: ['nlp', 'chatGPT']
+draft: false
+layout: PostSimple
+summary: "GPT-3 is revolutionizing the world of AI and language processing. As the driving force behind ChatGPT, it's essential to understand what GPT-3 is, how it works, and what it's capable of. In this blog, we will explore GPT-3 through an illustrated guide, breaking down its inner workings and explaining its capabilities in an easy-to-understand manner. Whether you're a tech enthusiast or just curious about the future of AI, this blog will provide valuable insights into the power of GPT-3."
+---
+<TOCInline toc={props.toc} asDisclosure />
+
+## Introduction
+
+Large Language Models(LLMs) are a buzz these days. Models like GPT-3, PaLM, T5, BERT, and so on... have pushed state-of-the-art (SoTA) results in the NLP world to a new level. Even a complete novice person who doesn’t have any prior knowledge of the machine-learning world is able to experience an ocean of applications offered by these gigantic models. Especially, if it isn’t for OpenAI unlike other AI organizations, which have released all the models it developed in a way even a normal person can interact with and appreciate, making the world realize that something big is happening. The API playground it offered, and the websites it made to interact with its models (chatGPT for example) really should be appreciated since no other organizations have really come close to demonstrating their innovations to the normal public as OpenAI does.
+
+Coming straight to the point, this blog is so wordy and might be difficult to go through in one go so go through this if you’re in the right mood. This article is just a culmination of information on how Large Language Models are built from the ground up i.e., data they use to train on and the deep inner workings. And this is done by comparing various LLMs simultaneously. So, this blog will be useful if you are working on a team that builds LLMs since as I mentioned this blog gathers information about various LLMs in one place with some simple explanations and illustrations.
+
+## Step 1: Getting and Cleaning the Data
+
+This is where the problem begins. Basically, we need text to train our neural network model. The more data, the better the model. Nowadays, it’s really too easy to get an unprecedented amount of text from the internet thanks to the common crawl which does that operation and stores this text data in various formats. But one should be able to answer the following inferences if they want to feed this text directly to their neural network model:
+
+- The internet is a mess, and all the faults in documents, sentences, and, words across the world wide web like meaningless, duplicate documents, untruthful and low-quality sentences, misspelled words, and so much more which we sometimes cannot even guess, and even cannot be listed down one by one.
+- But we just know one thing, i.e., we know what good data looks like rather than thinking of possibilities of how bad data looks. So, how can we get this good text data i.e., high-quality documents with good use of vocabulary and well-organized sentences and words from the internet which encompasses bad data as well?
+- Typical preprocessing NLP techniques like removing stop words, converting upper to lower cases, and other stuff don’t make sense since we want our LLMs to generate human-like text meaning every little detail has to be preserved. So, How do we preprocess or filter or clean the datasets we collect?
+
+Let’s see how big AI organizations have answered the above questions through their research:
+
+#### OpenAI’s GPT Family
+
+As I have mentioned earlier, OpenAI’s GPT models are well-known, especially GPT-3 which has brought chatGPT among us. It is right to say that they started small and raised the levels thereafter. You’ll see what I mean in a moment.
+
+For training the GPT model they have collected the BookCorpus Dataset which has thousand of unpublished books from various genres like Adventure, Romance, etc… As you might have guessed, GPT-1 isn't trained on the internet but we can say to an extent that they have collected a well high-quality dataset since books as we know contains good text compared to the whole internet garbage. So, no worries about preprocessing steps (standardizing some punctuation and whitespace is more than enough). Also at that moment OpenAI really wanted to experiment with model architecture more than pondering on the dataset.
+
+![](https://lh3.googleusercontent.com/HWVUbPJQcDrVYK6MiqFxM29oUxhUE8aTIe4xFmK0rZ7QVHACk4u_ipCt2UPHgv1IpS4QsFGE1C6Fqok9IFy1nYkOairnFH9XFar0UzLlv8CiJIj6KTY9I9BRFoR7TtxPWFbtJVnNd-LgTmVKczjUZCg)
+
+Time for GPT-2 to level up the amount of text data it gets to train on. They have realized as we’ve discussed earlier a large and diverse dataset like Commoncrawl (which has nearly unlimited text) has significant data quality issues and the content is mostly unintelligible i.e., bad data. But if you think about collecting good data we have one reliable source i.e., human intelligence since as humans we only like to read good text data. So, they’ve done the following in hopes of getting good data i.e., they scrapped all outbound links(a link from Reddit to an external website), about 45 million links in Reddit, which received at least 3 karma (user's score, totaling their amount of upvotes against their downvotes) resulting in a new dataset which they named as **WebText.**
+
+    During preprocessing phase, they removed all Wikipedia documents and performed de-duplication (removing duplicate documents) and some heuristic-based cleaning (See the list below)
+
+Heuristic-based cleaning involves using rules or algorithms to clean or filter data in a dataset based on experience or common sense. Some possible heuristic-based cleaning approaches that may be used to clean a text dataset like WebText include:
+
+1. Remove documents or web pages with a low word count or content quality.
+2. Filtering out pages that are not in English.
+3. Eliminating pages with broken or missing links.
+4. Removing pages with a high proportion of advertising or spam content.
+5. Filtering out pages that are duplicates or near-duplicates.
+6. Removing pages with irrelevant or uninformative content, such as placeholder pages or login pages.
+7. Removing HTML tags or other formatting elements from the text etc… (kind of depends on the dataset collected)
+
+As time progressed, OpenAI realized their model architecture is successful in comprehending text, but also the time has come to make their model look at the entire internet (Common Crawl Dataset) since the model has to know everything in order to be reliable and practical for everyone but the long unanswered question still persists “how do we deal with the mess in the internet?”. As it turns out the answer is just to keep the bar of good text data as high as possible than the bad text data so that the model is susceptible to generating good text rather than bad text. That’s exactly what the organization has done while dealing with the dataset it has collected to train GPT-3:
+
+1. Filtered a version of CommonCrawl based on similarity to a range of high-quality reference corpora
+2. Performed fuzzy deduplication at the document level, within and across datasets, to prevent redundancy and preserve the integrity of our held-out validation set as an accurate measure of overfitting
+3. Added known high-quality references corpora like the expanded version of WebText, two internet-based books corpora (Books1 and Books2), and English-Language Wikipedia to the training mix to augment CommonCrawl and increase its diversity.
+
+#### What do I do with this information?
+
+Unless you’re working as a research engineer in one of the big Tech companies this information isn’t going to get you so far in building your own neural network model since dealing with this amount of data and infrastructure to train the model with it isn’t something you can have right away. But the following points can be your takeaways:
+
+1. The task of Language modeling is to predict the next token given a sequence of tokens and through this process of prediction, we want our model to generate human-like text. Hence typical NLP pre-processing techniques like removing punctuations, lowercasing, stemming, removing stop words, etc.. shouldn’t be performed.
+2. Rather apply Heuristic-based cleaning (see the list mentioned above) based on the dataset you’ve collected.
+
+## Step 2: Tokenization 
+
+Let’s assume we’ve done everything that we can do to the data i.e., maximizing the likelihood of the presence of high-quality text data over poor quality. It’s time for tokenization, which simply means breaking down the text into tokens (note that the token may be a character, word, or subword). Why are we doing this? Well, that’s how language modeling task works, remember? (predicting the next token given a sequence of tokens). Basically, you’ll get two things when you perform tokenization:
+
+1. Vocabulary which is a set of all unique tokens
+2. Total Number of Tokens for your dataset
+
+Before tokenization, we again have to answer a series of questions:
+
+- We say a sentence has ended when there is a full stop(“.”) and follow-up space (in most cases) for a word, right? But how can we say a document has ended?
+- This is where special tokens come into the picture. Various LLMs use different types of special tokens which commonly differ from each other.
+- When should we add special tokens before tokenization or after tokenization, if after tokenization and forming batches of sequences is it to start or end, or both, or some random places in a sequence? Should this be done by some rules?
+- Also, how can we teach our model when should it end up generating text? For example, if I want my model to answer a question then it should end right after it generates a sufficient answer. Note that you don’t have to bother about this during the pre-training phase (language modeling) phase of the model, you can teach your model later as to when should it end its response. But for the zero-shot setting, we need to think about it.
+- As vocabulary size increases, the total number of tokens decreases and vice versa. Is there any optimal rule stating which one to prioritize more vocabulary size or the number of tokens?
+
+Let’s explore how big LLMs have answered through their work.
+
+#### OpenAI’s GPT Family
+
+OpenAI's first version of GPT used Byte-Pair Encoding (BPE) to create its vocabulary. Basically, it does 40,000 merges on the training corpus (this would make sense if you know a little about the BPE algorithm). Sadly, they didn’t mention either the vocabulary size or the total number of tokens and no details of special tokens. But the BPE algorithm is the one you can take note of.
+
+Before talking about tokenization, GPT-2 addresses the problem of either choosing a Byte-level Language model or a word-level language model. Typically, words are fed as (converted to) embedding vectors (referred to as encoding) while loading them into neural network models. This indeed is a word-level language model. Whereas in byte-level you have bytes (recall a byte consists of 8 bits (0s or 1s)) instead of words. So the model is predicting the next byte given a sequence of bytes. The question that should strike you immediately is “Why should we even consider going with bytes when we can comfortably deal with words?”. Both language models have their own pros and cons but the answer to the above question can be answered nicely with one single point
+
+- **Vocabulary Size and Handling Out-of-Vocabulary tokens:** In simple words, with word-level tokenization, the size of vocabulary size will be larger and dependent on the dataset, and at the same time any unknown word (if we use another dataset to test our model) which isn’t in the vocabulary can’t be dealt with. On the other hand, byte-level tokenization has a fixed-size vocabulary of size **[256](https://www.ascii-code.com/)** and can handle any sequence of Unicode characters, including text in multiple languages, emojis, and special characters (intriguing!! Isn’t it?).
+
+**Which one did GPT-2 choose then?** It has chosen sub-word level tokenization using a Byte-level Encoding (BPE) algorithm which offers the best of both byte-level and word-level worlds. The BPE algorithm works by iteratively merging the most frequent pairs of contiguous bytes in the corpus until a predefined vocabulary size is reached. Hence after tokenizing with this particular tokenization algorithm the vocabulary size of GPT-2 is 50,247 tokens. Indeed GPT-2 now open-sourced this vocab size and the corresponding tokenizer so that you can use it for tokenizing your dataset (Note that the vocab size is fixed i.e., 50,247).
+
+GPT-3 uses the subword-tokenizer with a fixed vocabulary size of 50,247 tokens developed during GPT-2 (on WebText) over its gigantic dataset corpus resulting in 300 billion tokens for the model to train on. And the next thing i.e., after tokenizing and forming sequences array of length 2048 tokens (context size or block size), if a document is smaller than 2048 then it is merged with another document separated by a special token.
+
+#### What are the things that I can experiment on?
+
+## Step 3: Model’s Architecture
+
+Before diving into the details, it is really worthier to know that this is the area where anyone even an ordinary person can bring in innovations. For instance, AlexNet, created by Alex Krizhevsky is the first CNN model architecture to win the ImageNet competition. Anyways, coming back to the topic, a breakthrough happened in 2017 in the NLP world which no one saw coming. It’s a research paper titled “Attention is all you need” published by Google introducing a new architecture that will change the way neural networks understand text i.e., Transformers to the world. The world of RNNs, LSTMs, and GRUs rendered useless with its introduction and in just a few years every model that is developed borrowed the transformers architecture idea in some way or the other. For example, the GPT family uses transformers decoder-only architecture, BERT uses transformers encoder, and the T5 framework uses both encoder and decoder to frame themselves as Large Language Models (LLMs). The ability to understand long sequences and their parallelization processing capability kept transformers on the throne which previous RNN-based architectures failed to achieve.
+
+As you might have not guessed, it is important to understand how Transformers work before drenching yourself with Large Language Models (LLMs) architectural details. I recommend you go through the illustrated guide to transformers by jay alammar's blog to get a grip on it.
+
+#### OpenAI’s GPT Family
+
+As I mentioned earlier, the GPT family uses decoder-only Transformers. GPT-1 model has 12 decoder blocks. A decoder block further comprises two things: a self-attention layer and a feed-forward neural network (MLP). GPT-2, and GPT-3 have the same configuration but the details of how many decoder blocks are used, and other internal details change. Let’s read in their own words:
+
+For GPT-2: “Our language model is based on a Transformer architecture similar to OpenAI GPT with modifications such as input layer normalization, an added final layer normalization, and modified weight initialization. The vocabulary has been expanded to 50,257 and the context size increased to 1024 tokens with a larger batch size of 512. The residual layers have been scaled at initialization to improve performance.”  (See the training details section for clear guidance)
+
+For GPT-3:  “We use the same model and architecture as GPT-2   including the modified initialization, pre-normalization, and reversible tokenization described therein, with the exception that we use alternating dense and locally banded sparse attention patterns in the layers of the transformer, similar to the Sparse Transformer”
+
+Before going any further, I think it is important to ponder the following questions:
+
+- How do researchers decide upon the choice of hyperparameters to choose for the model?
+- Like in the case of models like GPT, how many decoder blocks should we use, the choice of the number of attention heads, the head size (output vector size of each token) of each attention head, embedding dimensions for a token, the number of hidden layers in FFNN, the dimensionality of the hidden layer, which activation function to try and so much more to decide upon.
+- There is indeed no specific answer to these questions, rather than trying out empirically using computationally inexpensive datasets. With each little experiment, you can spell out some words from the observations you make. For example, increasing self-attention layers makes the tokens talk to each other more, alleviating the size of FFNN gives the tokens more time to think about what they have seen from self-attention layers, and so on…
+- Also, from time to time, there are research papers that get published spelling out the inferences from the experiments they conduct on the model’s hyperparameters providing a well-informed initialization further.
+- The story doesn’t end there, if you know how transformers work, there are some handful of hyperparameters inside the self-attention layer as well. Also, we need to make a decision on the context size (sequence block size) and the number of batches to feed in at a time to the model.
+
+## Step 4: Training Details 
+
+We can wrap up the entire story of training through the following paragraph:
+
+Large data is collected, cleaned, tokenized, and finally divided into batches of training data ready to get fed into the model. Instead of feeding the entire data or batches only a fixed group of batches goes into the model one by one saving the computer’s memory (RAM). Thus the model learns from the flow of batches it receives. An epoch is a loop indicating how many times you’re making the model see the entire data (2 epochs mean the model has seen the entire training data two times). A step in an epoch means since we have batches to feed to train, one batch that goes into the model input pipeline corresponds to one step. Therefore, the total number of batches is equal to the number of steps per epoch.
+
+That’s a typical theory about training everyone knows of, but there is another interesting way to train your model. Basically, feeding huge amounts of data (Common Crawl for example) more than once is a daunting task and it is computationally expensive. Instead, what LLMs researchers do is they shuffle their batches of training data and they train their model by sampling the batches using either of the two options: sample a batch with replacement and sample a batch without replacement. Only hyperparameters stay in this case and it is not epoch or step per epoch is a new term named “iterations” meaning the number of times you sample a single batch from the pile of batches. Also, the training and validation losses are not calculated for the entire data during each iteration (computationally expensive again) rather they are computed after a specific number of iterations are exhausted referred to as evaluation interval, and computed for only a fixed number of batches (for a sample in their entire population) which is referred to as evaluation iterations.
+
+Let’s go through the story of how different LLMs trained their models:
+
+#### OpenAI’s GPT Family
+
+**Forward Pass Details**
+
+- Decoder-only Transformer with 12 decoder blocks, masked self-attention heads (present tokens do not see the values of the future tokens) with 12 attention heads, and the output size of each token are 768 (embedding size). For FFNN, the number of neurons in the hidden layers is 3072 (768\*4) each.
+- Gaussian Error Linear Unit (GELU) is used as an activation function and randomly initialized positions embedding matrix (elements are tuned while training) rather than the sinusoidal version proposed in the transformer.
+- LayerNormalization is used, also weight initialization between the values (0, 0.2), residual connections, embedding, and dropout with a rate of 0.1 for regularization
+
+**Backward Pass Details**
+
+- Adam optimization scheme with a max learning rate of 2.5e-4 using stochastic gradient descent as backward propagation algorithm i.e., parameters is updated for every batch, not for a group of batches.
+- The learning rate was increased linearly from zero over the first 2000 updates and annealed to 0 using a cosine schedule.
+
+**Overall Training Details**
+
+- Trained for 100 epochs (since Books corpus isn’t really a huge one to deal with) with a group of 64 batches (shuffled and randomly sampled) each for one epoch and each batch has a sequence of 512 tokens.
+
+**GPT-2**
+
+- Same as GPT-1 with few modifications. Layer normalization was moved to the input of each self-attention block (pre-activation) and the additional layer norm was to the final self-attention block
+- Scale the weights of residual layers at initialization by a factor of 1/ √ N where N is the number of residual layers.
+- The batch size is increased from 64 to 412 and each batch now has a sequence of 1024 tokens instead of 512 tokens.
+
+![](https://lh6.googleusercontent.com/hzKOv8ANrbbnfugo4Qq4DTbZDUjmSXCIu9pB7uTQDWT_B_3mJeeO07L-EgScwy3dcaYT2L_rnZ3rDK63-j7x-56wNzn5Hosy83sWT9-cmnEU8gMdlMoOH16yycBozwurTPmz_t1kCH7BNNcwI-ajEBg)
+
+**GPT-3**
+
+![](https://lh3.googleusercontent.com/PBzIy6q4B-a5H0whUzdaK38ghIW9SEc51EduQjkQcXaUXGQUFSL5fHuIpuezYWUJ9t7usANU4UY2boTcREoSR5i6Cu7cwW-HT-HXBMzhQgbQA8DlZ9EusO51x3WSnSmIr2BW577J__3xQOIUcHZuV0I)
+
+**Forward-pass Details**
+
+- All models use a weight decay of 0.1 to provide a small amount of regularization
+
+Backward-pass Details
+
+- Adam with β1 = 0.9, β2 = 0.95, and  = 10−8, we clip the global norm of the gradient at 1.0, and we use cosine decay for learning rate down to 10% of its value, over 260 billion tokens (after 260 billion tokens, training continues at 10% of the original learning rate). There is a linear LR warm-up over the first 375 million tokens. We also gradually increase the batch size linearly from a small value (32k tokens) to the full value over the first 4-12 billion tokens of training, depending on the model size.
+
+Overall Training Details
+
+- Data are sampled without replacement during training (until an epoch boundary is reached) to minimize overfitting. Each batch has a sequence of 2048 tokens.
+
+Key points to take away:
+
+- Larger models use a larger batch size, but require a smaller learning rate.
