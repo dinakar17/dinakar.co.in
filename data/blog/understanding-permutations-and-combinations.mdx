@@ -1,0 +1,240 @@
+---
+title: 'Understanding Permutations and Combinations in an Easier and Intuitive Way'
+date: '2023-07-9'
+tags: ['data science', 'statistics', 'permutations', 'combinations']
+draft: false
+layout: PostSimple
+summary: 'Permutations and combinations are the fundamental concepts of probability theory. They are used in many areas of mathematics, statistics, and data science. In this article, we will learn about permutations and combinations in an easier and intuitive way.'
+---
+
+Permutations and combinations have numerous real-world applications across various fields. Here are some intuitive examples of how permutations and combinations are used:
+
+- Passwords and Security: When creating a password, permutations are used to calculate the number of possible combinations. For example, if you have a password with four numerical digits, there are 10 options for each digit (0-9). The total number of permutations is 10^4, or 10,000 different combinations.
+- Lottery and Gambling: In lotteries, combinations are used to calculate the odds of winning. For instance, in a lottery where you need to choose six numbers from a pool of 49, the total number of possible combinations is calculated as C(49, 6), which represents the number of ways you can choose six numbers out of 49.
+- Sports Tournament Brackets: In sports tournaments, permutations and combinations are used to determine the number of possible matchups and tournament brackets. The number of possible brackets depends on the number of teams and the tournament structure.
+- Genetics and Biology: Permutations and combinations are used in genetics to calculate the number of possible genetic combinations. They help determine the probability of specific traits or genotypes appearing in offspring based on the combination of genes from the parents.
+- Sampling and Surveys: Combinations are used in sampling techniques and surveys to calculate the number of possible sample combinations. This helps ensure that the sample chosen is representative of the larger population.
+- Data Analysis and Statistics: Permutations and combinations are used in data analysis and statistics to calculate probabilities, such as in permutation tests or combinations of variables. These techniques help analyze and interpret data to make informed decisions.
+- Network and Routing Problems: Permutations and combinations are used in network and routing problems, such as finding the best path or determining the shortest route between multiple locations.
+
+
+
+These are just a few examples showcasing the real-world applications of permutations and combinations. Their utility extends to various fields, including mathematics, computer science, economics, and more. From the above jargon, you can see that learning this concept will not disappoint you because of its tremendous use cases you can literally apply the knowledge to know any domain. So, to begin with, the following is going to be our roadmap to understanding this cryptic concept.
+
+
+
+## RoadMap
+
+
+
+1. Two fundamental principles of counting: Multiplication and Addition Rule
+2. Permutation and its intuition 
+3. Combination and its intuition
+4. Problems with Logical Explanations to make your understanding better
+
+
+
+**Disclaimer:** The above roadmap might raise some suspicions in you on whether you should go through this since this isn’t anything unique or something that covers everything in this area. And I’m not denying the fact that you can get better at anything if you practice more. **In this scenario, you will get better acquainted with this concept if you practice more problems.** The fundamental thing I’m trying to do here is to make the concepts clear and wrap your minds around what’s going on in a simple, and concise way with no technical jargon. That being said, let’s begin!
+
+
+
+## Multiplication Rule (Key phrase: Independent events)
+
+The multiplication rule is used when we want to calculate the total number of outcomes for a series of **independent events or choices**. It states that the total number of outcomes is equal to the product of the number of outcomes for each event.
+
+
+
+That is, consider a scenario where there are two independent events: Event A with m possible outcomes and Event B with n possible outcomes. The total number of outcomes for both events is given by the multiplication rule as m x n.
+
+
+
+**Example**
+
+For example, in Drawer A, you have 3 different shirts, and in Drawer B, you have 4 different pants. The total number of outfit combinations you can create by choosing one shirt and one pair of pants is determined by multiplying the number of options for each drawer: 3 shirts x 4 pants = 12 possible outfits. The events of selecting a shirt and selecting pants are independent because the choices in one event do not affect the choices in the other event.
+
+
+
+## Addition Rule (Key phrase: Mutually exclusive or dependent events)
+
+
+
+The addition rule is used when we want to calculate the total number of outcomes for a series of **mutually exclusive events**. It states that the total number of outcomes is equal to the sum of the number of outcomes for each event.
+
+
+
+**Example**
+
+
+
+Suppose, there are 5 doors in a room: 2 on one side and 3 on the other. A man has to go out of the room.
+
+Question: Number of ways in which man go out from any one of the doors?
+
+
+
+If you’ve done it right, the answer would be five as depicted in Figure 2. Now, let’s align our intuition with the above definition: 
+
+
+
+1. Let’s call the event of choosing either of the 2 doors on one side as Event A and choosing either of the 3 doors on the other side as Event B. 
+
+	![](https://lh6.googleusercontent.com/SKS5IUuXK9hWYUSSBECRb56Ldzw_VeQ3ct3zHSjvmY3diToOqGBBT4CN9vqKpLR3xRlkvU3RaMbl-1UtXoVIkMycbCUB44PNfVxAadDyz9FrKegfvDcAqCwSgnc8T89nUF0tgcevHwgvsjgfhFxcow)
+
+2. Here, both events are dependent or mutually exclusive i.e., the choice you make for Event A affects your choices to make for Event B. In other words, if you choose one of the doors on one side (Event A) you cannot be able to choose the door on the other side (Event B) since you’re already left.
+3. Since these two events are dependent and we need to calculate the total outcomes to go out, according to the addition rule you add the two i.e., 2 + 3=5 giving you the exact same answer.
+
+
+
+**Important Note:** Knowing when to apply the multiplication rule and when to apply the addition rule will make you a master in dealing with permutations and combinations. You’ll realize the importance of this statement as you do more and more problems and get your answers wrong. Identifying whether the events are dependent or independent is all it takes to know which rule to apply.
+
+
+
+## Permutation and its intuition (Key phrase: Arrangement or “Order is taken into account”)
+
+
+
+A permutation is an arrangement of objects in a specific order. It represents a distinct way of **ordering** the objects.
+
+
+
+**Example**
+
+Imagine you have a collection of five different books, labeled A, B, C, D, and E. You want to arrange these books on a shelf in a particular order. Each book represents an object, and the order in which the books are placed on the shelf represents a permutation. For example, one possible permutation could be A, B, C, D, E, where book A is on the leftmost side and book E is on the rightmost side. Another permutation could be C, B, A, E, D, where the books are arranged differently.
+
+
+
+The number of possible permutations depends on the number of objects or elements being arranged. In this case, we have five books, so we need to determine the number of permutations possible. The total number of permutations can be calculated using the formula for permutations:
+
+n! (n factorial), where n is the number of objects to be arranged.
+
+
+
+In our example, we have 5 books, so the number of permutations is 5! = 5 x 4 x 3 x 2 x 1 = 120. Therefore, there are 120 possible ways to arrange the five books on the shelf.
+
+
+
+**Formulas**
+
+1. Number of Permutations of n different things taken r at a time. Here’s the [proof](https://byjus.com/permutations-and-combinations-formulas/).  ![](https://lh3.googleusercontent.com/4yYlFhB6bdz2mgV5liZ-4RXIvFymogXFtYRXwwKQjgqisINiwtk51Qg54TxXIaRk5n1MpiR2hhk3a2dJldLFqICqtG2dRD6SOBPnwP-m1PwVm7dygXbGnG6yXUqFfFHT6Xski_l9cHw5vgY_7_XH_Cs)
+2. The number of permutations of n things taken all together when the things are not all different.
+
+![](https://lh6.googleusercontent.com/rLOY5cGz6R2GwPZ4YjqNCbYvko7A5nldX7NAoE5Fqm6iLjRnu2N35tcoiPE-_O2egH-t-9XBSQ05H2nlZF5Vy7Z2YdBimSIlT_ztDTubfsV3G-ksvbEsIiN23mNjVqSR2DvKU_wOImDisxKCrJehsg)
+
+Think of how this formula is formed. We can arrange let’s say a, b, c, d, e in `5!` (or 120) ways. Let’s modify and change b, c to a as well i.e., a, a, a, c, d. Now we say we have 5! arrangments which also consist of duplicate arrangements since we have 3 same a’s whose order doesn’t matter. What should we need to get rid of duplicate arrangments in the answer? Simply, divide (not subtract, pause, and think why) and you will get rid of duplicate arrangements.
+
+
+
+3. The number of permutations of n different things taken r at a time when each thing can be repeated any number of times.
+
+![](https://lh6.googleusercontent.com/Qbu3rs2v-S1vhaUrFQc5Cz-qOm9t47z1uGt2kFnljmUOAU3PMiQkksgNH2Upmk6My9_jwPebIbh8vJNDZ21IGsRTRr2v_kUdfmpMz8t4rt2dANF0aMA5f4xyyEINUdzIcxrJMojgOPCOFa62Rs79gg)
+
+
+
+
+## Combination and its intuition (Key phrase: Selection or “Order is not taken into account”)
+
+
+
+An analogy for combinations can be selecting a team of players from a pool of candidates. Let's say you have a group of 5 people: Alice, Bob, Cindy, David, and Emily. You want to form a team of 2 players.
+
+
+
+In combinations, **the order of selection doesn't matter**, meaning that the team of Alice and Bob is the same as the team of Bob and Alice. It's about selecting a group without considering the arrangement.
+
+
+
+To determine the number of possible combinations, we use the formula for combinations, which is represented as "nCk," where "n" is the total number of items and "k" is the number of items we want to select.
+
+
+
+In our analogy, we have 5 people (n = 5) and we want to select a team of 2 players (k = 2). Using the combination formula, we calculate 5C2:
+
+
+
+5C2 = 5! / (2! * (5 - 2)!) = (5 * 4) / (2 * 1) = 10.
+
+
+
+So, there are 10 different combinations of forming a team of 2 players from a group of 5 candidates. These combinations could be Alice and Bob, Alice and Cindy, Alice and David, Alice and Emily, Bob and Cindy, Bob and David, Bob and Emily, Cindy and David, Cindy and Emily, and David and Emily.
+
+
+
+**Formulas**
+
+1. Number of combinations of n different things taking r at a time (r < n)
+
+![](https://lh6.googleusercontent.com/dIH1jQV0N6ZffV6HkTlkWWmvCGLXE-3VdBreLP-QRfcBwcRkQhMu-_TXW_tQ-5xqyHa9JFBIloAhilAeN6Ll4---7FR6FDXXUzmPdaYn3B3BUHmRx4U19kA8HjF73Bw_WsFN0ONJwtSo_nochvQHLw)
+
+2. Number of combinations of n different things taken r at a time when p particular things are always included.
+
+![](https://lh3.googleusercontent.com/Jqlyy8F-q6NJJaFJVP7M0dQugMMcmaXxVvYLcc659r-rciH2pqYXX0RFM5qVeaLm_lRcVVAerlYsRT2f7YsMmMJ9XElRleLeNz_9F0hRLpOrOTXu3L8gAlJwIEB--YZQysDFbvLLRx-OQphO8_1Fbg)
+
+3. Number of combinations of n different things taken r at a time when p particular things are always to be excluded.
+
+![](https://lh6.googleusercontent.com/XFPOkXFeYdGlzDraVzqQdG-cSEzlLBFJDZnGieFRu4H1siRjArCT6A1PNaPokLOtdKdeP-CpnLGj7vtY8Lp0ywP0BykCG8OUCWadRSW6EvUFDuZI88kO4FgxW3Qm2VLi6B-di4An1SIg8-D6MYTgag)
+
+
+
+**Note: J**ust remember the basic formulas nPr and nCr and you’re good to go. Don’t forget that order/arrangement is important in permutations but not in combinations. Apply your intuition behind the formulas i.e., the nPr statement is the “number of arrangements you can make if you pick r objects from n objects (n>r). Whereas the nCr statement is the “different selections you can make if you need to choose r objects from n objects.”. You can also put the statement like nPr is making a selection and then arranging them in a different order.
+
+
+
+## Problems connecting concepts discussed so far
+
+
+
+**Problem 1**: How many words can be formed out of the letters of the word ‘EDUCATION’ such that vowels occupy odd positions? 
+
+
+
+Out of the nine letters, five are vowels and the other four are consonants. Therefore, 5 vowels can be arranged in 5 odd positions in 5P5 = 5! ways. Similarly, 4 consonants can be arranged in 4 alternate positions (even positions) in 4! ways. 
+
+ Total number of words = 5! x 4! = 2880. 
+
+
+
+Observations:
+
+ 	You can see that we’re using the multiplication rule here (5! X 4!). Because vowel arrangement is independent of consonant arrangement. In simple terms, they don’t prevent each other from happening.
+
+
+
+**Problem 2:** A candidate is required to answer 6 out of 10 questions which are divided into two groups each containing 5 questions and he is not permitted to attempt more than 4 from each group. In how many ways can he make his choice?  
+
+
+
+There are 10 questions in total from two groups A and B each consisting of 5 questions. A candidate can attempt a maximum of 4 questions from one group and 6 questions altogether 
+
+
+
+|                | Group A | Group B |
+|----------------|---------|---------|
+| Possibility #1 | 4       | 2       |
+| Possibility #2 | 3       | 3       |
+| Possibility #3 | 2       | 4       |
+
+
+
+ Number of possible combinations 
+
+= 5C4 x 5C2 + 5C3 x 5C3 + 5C2 x 5C3
+
+=5x10 + 10x10 +10x5 
+
+= 50+ 100 + 50 = 200 
+
+
+
+Observations
+
+Here we are employing both the multiplication rule and the addition rule. Choosing questions from Group A and B are independent events. But possibilities (#1, #2, #3) prevent happening from each other i.e., if one happens the other has no possibility to occur. In other words, they’re mutually exclusive events. 
+
+
+
+## Conclusion
+
+
+
+Permutation and combinations is such a concept that you can understand better and better as you solve more and more problems. Nonetheless, knowing when to apply the multiplication rule and addition rule will make you very proficient in this concept and handling the cases it is employed in.
+
+
